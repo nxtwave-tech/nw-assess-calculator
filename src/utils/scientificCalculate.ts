@@ -1,11 +1,44 @@
 import type { AngleMode, ScientificFunction } from '../types/calculator';
 
-function degreesToRadians(deg: number): number {
-  return (deg * Math.PI) / 180;
+const QUARTER_TURN: Record<AngleMode, number> = {
+  deg: 90,
+  rad: Math.PI / 2,
+  grad: 100,
+};
+
+function toRadians(value: number, mode: AngleMode): number {
+  if (mode === 'deg') return (value * Math.PI) / 180;
+  if (mode === 'grad') return (value * Math.PI) / 200;
+  return value;
 }
 
-function radiansToDegrees(rad: number): number {
-  return (rad * 180) / Math.PI;
+function fromRadians(radians: number, mode: AngleMode): number {
+  if (mode === 'deg') return (radians * 180) / Math.PI;
+  if (mode === 'grad') return (radians * 200) / Math.PI;
+  return radians;
+}
+
+function safeDivide(numerator: number, denominator: number): number {
+  return denominator === 0 ? NaN : numerator / denominator;
+}
+
+/** Exact sin/cos on quarter turns so tan(90°) and sec(90°) are errors, not huge numbers. */
+function sinCos(value: number, mode: AngleMode): { sin: number; cos: number } {
+  const quarter = QUARTER_TURN[mode];
+  const quarters = value / quarter;
+  const nearest = Math.round(quarters);
+  if (nearest !== 0 && Math.abs(quarters - nearest) < 1e-9) {
+    const quadrant = ((nearest % 4) + 4) % 4;
+    const exact = [
+      { sin: 0, cos: 1 },
+      { sin: 1, cos: 0 },
+      { sin: 0, cos: -1 },
+      { sin: -1, cos: 0 },
+    ];
+    return exact[quadrant] ?? { sin: 0, cos: 1 };
+  }
+  const radians = toRadians(value, mode);
+  return { sin: Math.sin(radians), cos: Math.cos(radians) };
 }
 
 function factorial(n: number): number {
@@ -22,21 +55,24 @@ function factorial(n: number): number {
 type Evaluator = (value: number, angleMode: AngleMode) => number;
 
 const EVALUATORS: Record<ScientificFunction, Evaluator> = {
-  sin: (v, m) => Math.sin(m === 'deg' ? degreesToRadians(v) : v),
-  cos: (v, m) => Math.cos(m === 'deg' ? degreesToRadians(v) : v),
-  tan: (v, m) => Math.tan(m === 'deg' ? degreesToRadians(v) : v),
-  asin: (v, m) => {
-    const r = Math.asin(v);
-    return m === 'deg' ? radiansToDegrees(r) : r;
+  sin: (v, m) => sinCos(v, m).sin,
+  cos: (v, m) => sinCos(v, m).cos,
+  tan: (v, m) => {
+    const { sin, cos } = sinCos(v, m);
+    return safeDivide(sin, cos);
   },
-  acos: (v, m) => {
-    const r = Math.acos(v);
-    return m === 'deg' ? radiansToDegrees(r) : r;
+  sec: (v, m) => safeDivide(1, sinCos(v, m).cos),
+  csc: (v, m) => safeDivide(1, sinCos(v, m).sin),
+  cot: (v, m) => {
+    const { sin, cos } = sinCos(v, m);
+    return safeDivide(cos, sin);
   },
-  atan: (v, m) => {
-    const r = Math.atan(v);
-    return m === 'deg' ? radiansToDegrees(r) : r;
-  },
+  asin: (v, m) => fromRadians(Math.asin(v), m),
+  acos: (v, m) => fromRadians(Math.acos(v), m),
+  atan: (v, m) => fromRadians(Math.atan(v), m),
+  asec: (v, m) => (Math.abs(v) < 1 ? NaN : fromRadians(Math.acos(1 / v), m)),
+  acsc: (v, m) => (Math.abs(v) < 1 ? NaN : fromRadians(Math.asin(1 / v), m)),
+  acot: (v, m) => fromRadians(Math.PI / 2 - Math.atan(v), m),
   sinh: (v) => Math.sinh(v),
   cosh: (v) => Math.cosh(v),
   tanh: (v) => Math.tanh(v),
@@ -53,6 +89,7 @@ const EVALUATORS: Record<ScientificFunction, Evaluator> = {
   sqrt: (v) => (v < 0 ? NaN : Math.sqrt(v)),
   cbrt: (v) => Math.cbrt(v),
   factorial: (v) => factorial(v),
+  abs: (v) => Math.abs(v),
 };
 
 const FUNCTION_TO_WORD: Record<ScientificFunction, string> = {
@@ -78,6 +115,13 @@ const FUNCTION_TO_WORD: Record<ScientificFunction, string> = {
   sqrt: 'square root of',
   cbrt: 'cube root of',
   factorial: 'factorial of',
+  sec: 'secant of',
+  csc: 'cosecant of',
+  cot: 'cotangent of',
+  asec: 'arc secant of',
+  acsc: 'arc cosecant of',
+  acot: 'arc cotangent of',
+  abs: 'absolute value of',
 };
 
 /**

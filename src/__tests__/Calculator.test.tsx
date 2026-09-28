@@ -776,13 +776,13 @@ describe('Calculator', () => {
     it('renders the angle mode toggle button showing current mode', () => {
       renderScientific();
       // Default angleMode is 'rad'
-      expect(btn('Currently radians, switch to degrees')).toBeInTheDocument();
+      expect(btn('Currently radians, switch to gradians')).toBeInTheDocument();
     });
 
     it('toggling angle mode changes button label', async () => {
       const { user } = renderScientific();
-      await user.click(btn('Currently radians, switch to degrees'));
-      expect(btn('Currently degrees, switch to radians')).toBeInTheDocument();
+      await user.click(btn('Currently radians, switch to gradians'));
+      expect(btn('Currently gradians, switch to degrees')).toBeInTheDocument();
     });
 
     it('2nd toggle changes x squared to x cubed', async () => {
@@ -892,11 +892,11 @@ describe('Calculator', () => {
       expect(infoPanel!.textContent).toContain('RAD');
     });
 
-    it('shows DEG indicator after toggling angle mode', async () => {
+    it('shows GRAD indicator after toggling angle mode', async () => {
       const { user } = renderScientific();
-      await user.click(btn('Currently radians, switch to degrees'));
+      await user.click(btn('Currently radians, switch to gradians'));
       const infoPanel = document.querySelector('.calc-display__info');
-      expect(infoPanel!.textContent).toContain('DEG');
+      expect(infoPanel!.textContent).toContain('GRAD');
     });
 
     it('shows open paren indicator when parenDepth > 0', async () => {

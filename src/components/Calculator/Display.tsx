@@ -42,7 +42,9 @@ export function Display({
     <div className="calc-display">
       <div className="calc-display__info" aria-hidden="true">
         {showIndicators ? (
-          <span className="calc-display__angle-mode">{angleMode === 'deg' ? 'DEG' : 'RAD'}</span>
+          <span className="calc-display__angle-mode">
+            {angleMode === 'deg' ? 'DEG' : angleMode === 'grad' ? 'GRAD' : 'RAD'}
+          </span>
         ) : null}
         {showIndicators && parenDepth > 0 ? (
           <span className="calc-display__parens">{'('.repeat(parenDepth)}</span>

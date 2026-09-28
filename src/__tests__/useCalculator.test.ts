@@ -356,15 +356,12 @@ describe('useCalculator hook', () => {
       expect(result.current.angleMode).toBe('rad');
     });
 
-    it('toggles to degrees', () => {
+    it('cycles radians to gradians to degrees', () => {
       const { result } = renderHook(() => useCalculator());
+      act(() => result.current.toggleAngleMode());
+      expect(result.current.angleMode).toBe('grad');
       act(() => result.current.toggleAngleMode());
       expect(result.current.angleMode).toBe('deg');
-    });
-
-    it('toggles back to radians', () => {
-      const { result } = renderHook(() => useCalculator());
-      act(() => result.current.toggleAngleMode());
       act(() => result.current.toggleAngleMode());
       expect(result.current.angleMode).toBe('rad');
     });
@@ -372,14 +369,14 @@ describe('useCalculator hook', () => {
     it('announces the mode switch', () => {
       const { result } = renderHook(() => useCalculator());
       act(() => result.current.toggleAngleMode());
-      expect(result.current.announcement).toBe('Switched to degrees');
+      expect(result.current.announcement).toBe('Switched to gradians');
     });
 
     it('preserves angle mode after clear', () => {
       const { result } = renderHook(() => useCalculator());
       act(() => result.current.toggleAngleMode());
       act(() => result.current.clearAll());
-      expect(result.current.angleMode).toBe('deg');
+      expect(result.current.angleMode).toBe('grad');
     });
   });
 

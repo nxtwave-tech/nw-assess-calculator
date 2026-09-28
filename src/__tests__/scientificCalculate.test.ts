@@ -77,6 +77,27 @@ describe('evaluateScientificFunction', () => {
     it('tan(0°) = 0', () => {
       expect(evaluateScientificFunction(0, 'tan', 'deg')).toBeCloseTo(0);
     });
+
+    it('tan(90°) and sec(90°) are undefined', () => {
+      expect(evaluateScientificFunction(90, 'tan', 'deg')).toBeNaN();
+      expect(evaluateScientificFunction(90, 'sec', 'deg')).toBeNaN();
+    });
+
+    it('sin(180°) is exactly 0', () => {
+      expect(evaluateScientificFunction(180, 'sin', 'deg')).toBe(0);
+    });
+
+    it('sin(100 grad) = 1', () => {
+      expect(evaluateScientificFunction(100, 'sin', 'grad')).toBe(1);
+    });
+
+    it('acot(-1) is 135°', () => {
+      expect(evaluateScientificFunction(-1, 'acot', 'deg')).toBeCloseTo(135);
+    });
+
+    it('abs ignores sign', () => {
+      expect(evaluateScientificFunction(-7, 'abs', 'rad')).toBe(7);
+    });
   });
 
   describe('inverse trigonometric functions (radians)', () => {

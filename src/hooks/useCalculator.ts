@@ -174,12 +174,19 @@ const handleApplyScientific: Handler<'APPLY_SCIENTIFIC_FUNCTION'> = (state, acti
   };
 };
 
+const NEXT_ANGLE_MODE = { rad: 'grad', grad: 'deg', deg: 'rad' } as const;
+const ANGLE_MODE_ANNOUNCEMENT = {
+  rad: 'Switched to radians',
+  grad: 'Switched to gradians',
+  deg: 'Switched to degrees',
+} as const;
+
 const handleToggleAngleMode: Handler<'TOGGLE_ANGLE_MODE'> = (state) => {
-  const newMode = state.angleMode === 'deg' ? 'rad' : 'deg';
+  const newMode = NEXT_ANGLE_MODE[state.angleMode];
   return {
     ...state,
     angleMode: newMode,
-    announcement: newMode === 'deg' ? 'Switched to degrees' : 'Switched to radians',
+    announcement: ANGLE_MODE_ANNOUNCEMENT[newMode],
   };
 };
 
@@ -199,7 +206,7 @@ const handleOpenParen: Handler<'OPEN_PAREN'> = (state) => ({
   ...state,
   previousValue: null,
   operator: null,
-  waitingForOperand: false,
+  waitingForOperand: true,
   expression: '',
   parenDepth: state.parenDepth + 1,
   parenStack: [

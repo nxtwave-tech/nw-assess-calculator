@@ -18,6 +18,8 @@ export interface CalcButtonProps extends ButtonHTMLAttributes<HTMLButtonElement>
    * and the pressed visual styling. Ignored for non-operator variants.
    */
   pressed?: boolean;
+  /** Small label for the function shown when 2nd is toggled. Hidden from assistive tech. */
+  caption?: string;
 }
 
 /**
@@ -31,6 +33,7 @@ export function CalcButton({
   variant = 'number',
   wide = false,
   pressed,
+  caption,
   className = '',
   ...rest
 }: CalcButtonProps): ReactElement {
@@ -46,6 +49,11 @@ export function CalcButton({
       aria-pressed={variant === 'operator' && pressed !== undefined ? pressed : undefined}
       {...rest}
     >
+      {caption ? (
+        <span className="calc-btn__caption" aria-hidden="true">
+          {caption}
+        </span>
+      ) : null}
       {label}
     </button>
   );

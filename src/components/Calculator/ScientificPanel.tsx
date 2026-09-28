@@ -50,6 +50,7 @@ function ScientificRow1(props: ButtonPanelProps): ReactElement {
       />
       <CalcButton
         label={isSecondFunction ? 'x³' : 'x²'}
+        caption={isSecondFunction ? 'x²' : 'x³'}
         ariaLabel={isSecondFunction ? 'x cubed' : 'x squared'}
         variant="scientific"
         onClick={() => {
@@ -57,15 +58,17 @@ function ScientificRow1(props: ButtonPanelProps): ReactElement {
         }}
       />
       <CalcButton
-        label="xⁿ"
-        ariaLabel="x to the power of n"
+        label={isSecondFunction ? 'ⁿ√x' : 'xⁿ'}
+        caption={isSecondFunction ? 'xⁿ' : 'ⁿ√x'}
+        ariaLabel={isSecondFunction ? 'nth root of x' : 'x to the power of n'}
         variant="scientific"
         onClick={() => {
-          onOperator('^');
+          onOperator(isSecondFunction ? 'nthRoot' : '^');
         }}
       />
       <CalcButton
         label={isSecondFunction ? '10ˣ' : 'eˣ'}
+        caption={isSecondFunction ? 'eˣ' : '10ˣ'}
         ariaLabel={isSecondFunction ? '10 to the power of x' : 'e to the power of x'}
         variant="scientific"
         onClick={() => {
@@ -99,6 +102,7 @@ function ScientificRow2(props: ButtonPanelProps): ReactElement {
       />
       <CalcButton
         label={isSecondFunction ? '∛x' : '√x'}
+        caption={isSecondFunction ? '√x' : '∛x'}
         ariaLabel={isSecondFunction ? 'Cube root' : 'Square root'}
         variant="scientific"
         onClick={() => {
@@ -115,6 +119,7 @@ function ScientificRow2(props: ButtonPanelProps): ReactElement {
       />
       <CalcButton
         label={isSecondFunction ? 'log₁₀' : 'ln'}
+        caption={isSecondFunction ? 'ln' : 'log₁₀'}
         ariaLabel={isSecondFunction ? 'Log base 10' : 'Natural log'}
         variant="scientific"
         onClick={() => {
@@ -157,14 +162,20 @@ function ScientificRow3(props: ButtonPanelProps): ReactElement {
     { fn: 'cosh', inverse: 'acosh', label: 'cosh' },
     { fn: 'tanh', inverse: 'atanh', label: 'tanh' },
   ];
-  const trigLabel = (t: (typeof trig)[number]): string => (isSecondFunction ? t.inverse : t.label);
+  const trigLabel = (t: (typeof trig)[number]): string =>
+    isSecondFunction ? `${t.label}⁻¹` : t.label;
+  const trigCaption = (t: (typeof trig)[number]): string =>
+    isSecondFunction ? t.label : `${t.label}⁻¹`;
   const trigAria = (t: (typeof trig)[number]): string => {
     const baseName = t.label === 'sin' ? 'Sine' : t.label === 'cos' ? 'Cosine' : 'Tangent';
     const arcName =
       t.label === 'sin' ? 'Arc sine' : t.label === 'cos' ? 'Arc cosine' : 'Arc tangent';
     return isSecondFunction ? arcName : baseName;
   };
-  const hypLabel = (h: (typeof hyp)[number]): string => (isSecondFunction ? h.inverse : h.label);
+  const hypLabel = (h: (typeof hyp)[number]): string =>
+    isSecondFunction ? `${h.label}⁻¹` : h.label;
+  const hypCaption = (h: (typeof hyp)[number]): string =>
+    isSecondFunction ? h.label : `${h.label}⁻¹`;
   const hypAria = (h: (typeof hyp)[number]): string => {
     const baseName =
       h.label === 'sinh'
@@ -187,6 +198,7 @@ function ScientificRow3(props: ButtonPanelProps): ReactElement {
         <CalcButton
           key={t.label}
           label={trigLabel(t)}
+          caption={trigCaption(t)}
           ariaLabel={trigAria(t)}
           variant="scientific"
           onClick={() => {
@@ -198,6 +210,7 @@ function ScientificRow3(props: ButtonPanelProps): ReactElement {
         <CalcButton
           key={h.label}
           label={hypLabel(h)}
+          caption={hypCaption(h)}
           ariaLabel={hypAria(h)}
           variant="scientific"
           onClick={() => {
@@ -209,21 +222,48 @@ function ScientificRow3(props: ButtonPanelProps): ReactElement {
   );
 }
 
+const ANGLE_BUTTON = {
+  rad: { label: 'Rad', next: 'Grad', currentWord: 'radians', nextWord: 'gradians' },
+  grad: { label: 'Grad', next: 'Deg', currentWord: 'gradians', nextWord: 'degrees' },
+  deg: { label: 'Deg', next: 'Rad', currentWord: 'degrees', nextWord: 'radians' },
+} as const;
+
 function ScientificRow4(props: ButtonPanelProps): ReactElement {
-  const { angleMode, onToggleAngleMode } = props;
+  const { angleMode, onToggleAngleMode, onScientificFunction, isSecondFunction } = props;
+  const angle = ANGLE_BUTTON[angleMode];
+  const reciprocal = [
+    { fn: 'sec' as const, inverse: 'asec' as const, label: 'sec', name: 'Secant', arc: 'Arc secant' },
+    {
+      fn: 'csc' as const,
+      inverse: 'acsc' as const,
+      label: 'cosec',
+      name: 'Cosecant',
+      arc: 'Arc cosecant',
+    },
+    { fn: 'cot' as const, inverse: 'acot' as const, label: 'cot', name: 'Cotangent', arc: 'Arc cotangent' },
+  ];
   return (
     <>
       <CalcButton
-        label={angleMode === 'rad' ? 'Rad' : 'Deg'}
-        ariaLabel={
-          angleMode === 'rad'
-            ? 'Currently radians, switch to degrees'
-            : 'Currently degrees, switch to radians'
-        }
+        label={angle.label}
+        caption={`→ ${angle.next}`}
+        ariaLabel={`Currently ${angle.currentWord}, switch to ${angle.nextWord}`}
         variant="scientific"
         onClick={onToggleAngleMode}
       />
-      <Spacers count={5} />
+      {reciprocal.map((entry) => (
+        <CalcButton
+          key={entry.fn}
+          label={isSecondFunction ? `${entry.label}⁻¹` : entry.label}
+          caption={isSecondFunction ? entry.label : `${entry.label}⁻¹`}
+          ariaLabel={isSecondFunction ? entry.arc : entry.name}
+          variant="scientific"
+          onClick={() => {
+            onScientificFunction(isSecondFunction ? entry.inverse : entry.fn);
+          }}
+        />
+      ))}
+      <Spacers count={2} />
     </>
   );
 }
@@ -248,7 +288,31 @@ export function ScientificPanel(props: ButtonPanelProps): ReactElement {
       <ScientificRow4 {...props} />
       <StandardRow4 {...props} />
 
-      <Spacers count={6} />
+      <CalcButton
+        label="|x|"
+        ariaLabel="Absolute value"
+        variant="scientific"
+        onClick={() => {
+          props.onScientificFunction('abs');
+        }}
+      />
+      <CalcButton
+        label="nCr"
+        ariaLabel="Combinations"
+        variant="scientific"
+        onClick={() => {
+          props.onOperator('nCr');
+        }}
+      />
+      <CalcButton
+        label="nPr"
+        ariaLabel="Permutations"
+        variant="scientific"
+        onClick={() => {
+          props.onOperator('nPr');
+        }}
+      />
+      <Spacers count={3} />
       <StandardRow5 {...props} />
     </div>
   );

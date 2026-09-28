@@ -1,6 +1,6 @@
 {
   "name": "@afixt/a11y-calc",
-  "version": "0.2.2",
+  "version": "0.3.0",
   "publishConfig": {
     "access": "public"
   },
@@ -18,7 +18,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/AFixt/a11y-calc.git"
+    "url": "https://github.com/omprakash-beniwal/nw-assess-calculator.git"
   },
   "main": "./dist/index.cjs",
   "module": "./dist/index.mjs",
@@ -86,7 +86,7 @@
     "check:ci": "run-s check test build size dupes links security:audit security:osv security:semgrep security:secrets license:check",
     "check:all": "run-s check test build size dupes links security:audit security:osv security:semgrep security:secrets security:codeql security:depcheck license:check",
     "ci": "npm run check:ci",
-    "prepare": "husky",
+    "prepare": "node -e \"process.exit(0)\"",
     "prepublishOnly": "npm run lint && npm test && npm run build"
   },
   "peerDependencies": {

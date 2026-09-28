@@ -1,6 +1,14 @@
 import { describe, expect, it } from 'vitest';
 
-import { calculate, formatDisplay, operatorToSymbol, operatorToWord } from '../utils/calculate';
+import {
+  calculate,
+  combinations,
+  formatDisplay,
+  nthRoot,
+  operatorToSymbol,
+  operatorToWord,
+  permutations,
+} from '../utils/calculate';
 
 describe('calculate', () => {
   it('adds two positive numbers', () => {
@@ -167,5 +175,42 @@ describe('operatorToWord', () => {
 
   it('maps ^ to to the power of', () => {
     expect(operatorToWord('^')).toBe('to the power of');
+  });
+});
+
+describe('nthRoot', () => {
+  it('returns 4 for the cube root of 64', () => {
+    expect(nthRoot(64, 3)).toBe(4);
+  });
+
+  it('returns -2 for the cube root of -8', () => {
+    expect(nthRoot(-8, 3)).toBe(-2);
+  });
+
+  it('rejects an even root of a negative and a zero index', () => {
+    expect(nthRoot(-16, 2)).toBeNaN();
+    expect(nthRoot(8, 0)).toBeNaN();
+  });
+});
+
+describe('combinations and permutations', () => {
+  it('computes 5 choose 2 and 200 choose 2', () => {
+    expect(combinations(5, 2)).toBe(10);
+    expect(combinations(200, 2)).toBe(19900);
+  });
+
+  it('computes 5 permute 2', () => {
+    expect(permutations(5, 2)).toBe(20);
+  });
+
+  it('rejects r greater than n and non-integers', () => {
+    expect(combinations(5, 6)).toBeNaN();
+    expect(permutations(2.5, 1)).toBeNaN();
+  });
+
+  it('is reachable through calculate', () => {
+    expect(calculate(8, 3, 'nthRoot')).toBe(2);
+    expect(calculate(5, 2, 'nCr')).toBe(10);
+    expect(calculate(5, 2, 'nPr')).toBe(20);
   });
 });

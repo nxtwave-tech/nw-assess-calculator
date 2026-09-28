@@ -178,6 +178,7 @@
 
 /* Base button styles */
 .calc-btn {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -191,6 +192,17 @@
   border-radius: var(--btn-radius);
   line-height: 1;
   -webkit-tap-highlight-color: transparent;
+}
+
+.calc-btn__caption {
+  position: absolute;
+  top: 3px;
+  left: 0;
+  right: 0;
+  font-size: 0.55rem;
+  line-height: 1;
+  opacity: 0.65;
+  pointer-events: none;
 }
 
 /* Focus styles — always visible, never suppressed */
