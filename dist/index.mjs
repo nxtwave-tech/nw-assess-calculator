@@ -719,7 +719,6 @@ var te = [
 		fn: "sin",
 		inverse: "asin",
 		label: "sin",
-		inverseLabel: "sin⁻¹",
 		name: "Sine",
 		inverseName: "Arc sine"
 	},
@@ -727,7 +726,6 @@ var te = [
 		fn: "cos",
 		inverse: "acos",
 		label: "cos",
-		inverseLabel: "cos⁻¹",
 		name: "Cosine",
 		inverseName: "Arc cosine"
 	},
@@ -735,7 +733,6 @@ var te = [
 		fn: "tan",
 		inverse: "atan",
 		label: "tan",
-		inverseLabel: "tan⁻¹",
 		name: "Tangent",
 		inverseName: "Arc tangent"
 	},
@@ -743,7 +740,6 @@ var te = [
 		fn: "sinh",
 		inverse: "asinh",
 		label: "sinh",
-		inverseLabel: "sinh⁻¹",
 		name: "Hyperbolic sine",
 		inverseName: "Inverse hyperbolic sine"
 	},
@@ -751,7 +747,6 @@ var te = [
 		fn: "cosh",
 		inverse: "acosh",
 		label: "cosh",
-		inverseLabel: "cosh⁻¹",
 		name: "Hyperbolic cosine",
 		inverseName: "Inverse hyperbolic cosine"
 	},
@@ -759,7 +754,6 @@ var te = [
 		fn: "tanh",
 		inverse: "atanh",
 		label: "tanh",
-		inverseLabel: "tanh⁻¹",
 		name: "Hyperbolic tangent",
 		inverseName: "Inverse hyperbolic tangent"
 	},
@@ -767,7 +761,6 @@ var te = [
 		fn: "csc",
 		inverse: "acsc",
 		label: "cosec",
-		inverseLabel: "cosec⁻¹",
 		name: "Cosecant",
 		inverseName: "Arc cosecant"
 	},
@@ -775,7 +768,6 @@ var te = [
 		fn: "sec",
 		inverse: "asec",
 		label: "sec",
-		inverseLabel: "sec⁻¹",
 		name: "Secant",
 		inverseName: "Arc secant"
 	},
@@ -783,11 +775,17 @@ var te = [
 		fn: "cot",
 		inverse: "acot",
 		label: "cot",
-		inverseLabel: "cot⁻¹",
 		name: "Cotangent",
 		inverseName: "Arc cotangent"
 	}
-], ne = [
+];
+function ne({ label: e }) {
+	return /* @__PURE__ */ a(r, { children: [e, /* @__PURE__ */ i("sup", {
+		className: "calc-btn__sup",
+		children: "-1"
+	})] });
+}
+var re = [
 	{
 		mode: "rad",
 		label: "Rad",
@@ -804,7 +802,7 @@ var te = [
 		name: "Degrees"
 	}
 ];
-function re(e) {
+function ie(e) {
 	let { isSecondFunction: t, onToggleSecondFunction: n, onScientificFunction: r, onOperator: o, onConstant: s, onOpenParen: c, onCloseParen: l, onBackspace: u, onSetAngleMode: d, onDigit: f, onDecimal: p, onEquals: m, onClear: h, onToggleSign: g, onPercent: _, angleMode: v, activeOperator: y, waitingForOperand: b } = e, x = (e) => y === e && b;
 	return /* @__PURE__ */ a("div", {
 		className: "calc-keypad",
@@ -824,7 +822,7 @@ function re(e) {
 					}), /* @__PURE__ */ i("div", {
 						className: "calc-keypad__group calc-keypad__group--3",
 						children: te.map((e) => /* @__PURE__ */ i(U, {
-							label: t ? e.inverseLabel : e.label,
+							label: t ? /* @__PURE__ */ i(ne, { label: e.label }) : e.label,
 							ariaLabel: t ? e.inverseName : e.name,
 							variant: "scientific",
 							onClick: () => r(t ? e.inverse : e.fn)
@@ -832,7 +830,7 @@ function re(e) {
 					})]
 				}), /* @__PURE__ */ i("div", {
 					className: "calc-keypad__group calc-keypad__group--3",
-					children: ne.map((e) => {
+					children: re.map((e) => {
 						let t = v === e.mode;
 						return /* @__PURE__ */ i(U, {
 							label: e.label,
@@ -1087,12 +1085,12 @@ function re(e) {
 }
 //#endregion
 //#region src/components/Calculator/ButtonPanel.tsx
-function ie(e) {
-	return e.mode === "scientific" ? /* @__PURE__ */ i(re, { ...e }) : /* @__PURE__ */ i(X, { ...e });
+function ae(e) {
+	return e.mode === "scientific" ? /* @__PURE__ */ i(ie, { ...e }) : /* @__PURE__ */ i(X, { ...e });
 }
 //#endregion
 //#region src/components/Calculator/Display.tsx
-function ae({ value: e, expression: t, mode: n, angleMode: r, parenDepth: o = 0 }) {
+function oe({ value: e, expression: t, mode: n, angleMode: r, parenDepth: o = 0 }) {
 	let s = e === "Error" ? "Error" : parseFloat(e) < 0 ? `negative ${Math.abs(parseFloat(e))}` : e, c = n === "scientific";
 	return /* @__PURE__ */ a("div", {
 		className: "calc-display",
@@ -1123,20 +1121,20 @@ function ae({ value: e, expression: t, mode: n, angleMode: r, parenDepth: o = 0 
 }
 //#endregion
 //#region src/components/Calculator/Calculator.tsx
-var oe = {
+var se = {
 	"+": "+",
 	"-": "-",
 	"*": "*",
 	"/": "/",
 	"^": "^"
 };
-function se({ theme: t, initialMode: r = "basic", showModeToggle: o = !0 }) {
+function ce({ theme: t, initialMode: r = "basic", showModeToggle: o = !0 }) {
 	let { displayValue: s, operator: c, waitingForOperand: l, expression: u, announcement: d, announcementKey: f, angleMode: p, parenDepth: m, inputDigit: h, inputDecimal: g, inputOperator: _, performCalculation: v, clearAll: y, toggleSign: b, inputPercent: x, backspace: S, applyScientificFunction: C, toggleAngleMode: w, setAngleMode: T, inputConstant: E, openParen: D, closeParen: O } = H(), [k, A] = n(r), [j, M] = n(!1), N = e(() => {
 		A((e) => e === "basic" ? "scientific" : "basic");
 	}, []), P = e(() => {
 		M((e) => !e);
 	}, []), F = e((e) => {
-		let { key: t } = e, n = oe[t];
+		let { key: t } = e, n = se[t];
 		t >= "0" && t <= "9" ? (e.preventDefault(), h(t)) : t === "." ? (e.preventDefault(), g()) : n === void 0 ? t === "Enter" || t === "=" ? (e.preventDefault(), v()) : t === "Escape" ? (e.preventDefault(), y()) : t === "Backspace" ? (e.preventDefault(), S()) : t === "%" ? (e.preventDefault(), x()) : t === "(" && k === "scientific" ? (e.preventDefault(), D()) : t === ")" && k === "scientific" && (e.preventDefault(), O()) : (e.preventDefault(), _(n));
 	}, [
 		h,
@@ -1179,14 +1177,14 @@ function se({ theme: t, initialMode: r = "basic", showModeToggle: o = !0 }) {
 					children: k === "scientific" ? "Basic" : "Scientific"
 				})
 			}) : null,
-			/* @__PURE__ */ i(ae, {
+			/* @__PURE__ */ i(oe, {
 				value: s,
 				expression: u,
 				mode: k,
 				angleMode: p,
 				parenDepth: m
 			}),
-			/* @__PURE__ */ i(ie, {
+			/* @__PURE__ */ i(ae, {
 				mode: k,
 				onDigit: h,
 				onDecimal: g,
@@ -1212,6 +1210,6 @@ function se({ theme: t, initialMode: r = "basic", showModeToggle: o = !0 }) {
 	});
 }
 //#endregion
-export { se as Calculator };
+export { ce as Calculator };
 
 //# sourceMappingURL=index.mjs.map

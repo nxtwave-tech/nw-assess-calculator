@@ -53,20 +53,18 @@ interface TrigKey {
   fn: ScientificFunction;
   inverse: ScientificFunction;
   label: string;
-  inverseLabel: string;
   name: string;
   inverseName: string;
 }
 
 const TRIG_KEYS: TrigKey[] = [
-  { fn: 'sin', inverse: 'asin', label: 'sin', inverseLabel: 'sin⁻¹', name: 'Sine', inverseName: 'Arc sine' },
-  { fn: 'cos', inverse: 'acos', label: 'cos', inverseLabel: 'cos⁻¹', name: 'Cosine', inverseName: 'Arc cosine' },
-  { fn: 'tan', inverse: 'atan', label: 'tan', inverseLabel: 'tan⁻¹', name: 'Tangent', inverseName: 'Arc tangent' },
+  { fn: 'sin', inverse: 'asin', label: 'sin', name: 'Sine', inverseName: 'Arc sine' },
+  { fn: 'cos', inverse: 'acos', label: 'cos', name: 'Cosine', inverseName: 'Arc cosine' },
+  { fn: 'tan', inverse: 'atan', label: 'tan', name: 'Tangent', inverseName: 'Arc tangent' },
   {
     fn: 'sinh',
     inverse: 'asinh',
     label: 'sinh',
-    inverseLabel: 'sinh⁻¹',
     name: 'Hyperbolic sine',
     inverseName: 'Inverse hyperbolic sine',
   },
@@ -74,7 +72,6 @@ const TRIG_KEYS: TrigKey[] = [
     fn: 'cosh',
     inverse: 'acosh',
     label: 'cosh',
-    inverseLabel: 'cosh⁻¹',
     name: 'Hyperbolic cosine',
     inverseName: 'Inverse hyperbolic cosine',
   },
@@ -82,14 +79,26 @@ const TRIG_KEYS: TrigKey[] = [
     fn: 'tanh',
     inverse: 'atanh',
     label: 'tanh',
-    inverseLabel: 'tanh⁻¹',
     name: 'Hyperbolic tangent',
     inverseName: 'Inverse hyperbolic tangent',
   },
-  { fn: 'csc', inverse: 'acsc', label: 'cosec', inverseLabel: 'cosec⁻¹', name: 'Cosecant', inverseName: 'Arc cosecant' },
-  { fn: 'sec', inverse: 'asec', label: 'sec', inverseLabel: 'sec⁻¹', name: 'Secant', inverseName: 'Arc secant' },
-  { fn: 'cot', inverse: 'acot', label: 'cot', inverseLabel: 'cot⁻¹', name: 'Cotangent', inverseName: 'Arc cotangent' },
+  { fn: 'csc', inverse: 'acsc', label: 'cosec', name: 'Cosecant', inverseName: 'Arc cosecant' },
+  { fn: 'sec', inverse: 'asec', label: 'sec', name: 'Secant', inverseName: 'Arc secant' },
+  { fn: 'cot', inverse: 'acot', label: 'cot', name: 'Cotangent', inverseName: 'Arc cotangent' },
 ];
+
+/**
+ * The function name with a real superscript -1. A hyphen is used instead of a
+ * minus sign so the longest label, cosec, still fits inside a keypad key.
+ */
+function InverseLabel({ label }: { label: string }): ReactElement {
+  return (
+    <>
+      {label}
+      <sup className="calc-btn__sup">-1</sup>
+    </>
+  );
+}
 
 const ANGLE_KEYS: { mode: AngleMode; label: string; name: string }[] = [
   { mode: 'rad', label: 'Rad', name: 'Radians' },
@@ -145,7 +154,7 @@ export function ScientificPanel(props: ButtonPanelProps): ReactElement {
             {TRIG_KEYS.map((key) => (
               <CalcButton
                 key={key.fn}
-                label={isSecondFunction ? key.inverseLabel : key.label}
+                label={isSecondFunction ? <InverseLabel label={key.label} /> : key.label}
                 ariaLabel={isSecondFunction ? key.inverseName : key.name}
                 variant="scientific"
                 onClick={() => onScientificFunction(isSecondFunction ? key.inverse : key.fn)}

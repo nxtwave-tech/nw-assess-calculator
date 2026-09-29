@@ -340,6 +340,13 @@
   background: var(--btn-scientific-active);
 }
 
+/* Superscript -1 on inverted trig labels */
+.calc-btn__sup {
+  font-size: 8px;
+  line-height: 0;
+  vertical-align: super;
+}
+
 /* Selected angle unit (Rad / Grad / Deg) */
 .calc-btn--selected,
 .calc-btn--selected:hover,
