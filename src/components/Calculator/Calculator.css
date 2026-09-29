@@ -173,7 +173,34 @@
 }
 
 .calc-buttons--scientific {
-  grid-template-columns: repeat(10, 1fr);
+  grid-template-columns: repeat(11, 1fr);
+}
+
+.calc-invert-row {
+  display: flex;
+  padding: 8px 8px 0;
+}
+
+.calc-invert-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 32px;
+  padding: 0 10px;
+  border: 1px solid var(--btn-number-bg, #e2e8f0);
+  border-radius: 8px;
+  background: transparent;
+  color: var(--btn-scientific-text, #334155);
+  font-family: inherit;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.calc-invert-toggle[aria-pressed='true'] {
+  background: var(--btn-operator-bg, #3b82f6);
+  border-color: var(--btn-operator-bg, #3b82f6);
+  color: var(--btn-operator-text, #fff);
 }
 
 /* Base button styles */

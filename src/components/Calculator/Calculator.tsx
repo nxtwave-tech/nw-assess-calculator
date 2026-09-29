@@ -58,6 +58,7 @@ export function Calculator({ theme, initialMode = 'basic' }: CalculatorProps): R
     backspace,
     applyScientificFunction,
     toggleAngleMode,
+    setAngleMode,
     inputConstant,
     openParen,
     closeParen,
@@ -191,6 +192,8 @@ export function Calculator({ theme, initialMode = 'basic' }: CalculatorProps): R
         isSecondFunction={isSecondFunction}
         onScientificFunction={applyScientificFunction}
         onToggleAngleMode={toggleAngleMode}
+        onSetAngleMode={setAngleMode}
+        onBackspace={backspace}
         onToggleSecondFunction={handleToggleSecondFunction}
         onConstant={inputConstant}
         onOpenParen={openParen}

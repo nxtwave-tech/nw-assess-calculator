@@ -29,6 +29,8 @@ export interface ButtonPanelProps {
   isSecondFunction: boolean;
   onScientificFunction: (fn: ScientificFunction) => void;
   onToggleAngleMode: () => void;
+  onSetAngleMode: (mode: AngleMode) => void;
+  onBackspace: () => void;
   onToggleSecondFunction: () => void;
   onConstant: (c: 'pi' | 'e') => void;
   onOpenParen: () => void;

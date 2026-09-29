@@ -331,6 +331,11 @@ var O = (e, t) => {
 			announcement: R[t]
 		};
 	},
+	SET_ANGLE_MODE: (e, t) => e.angleMode === t.mode ? e : {
+		...e,
+		angleMode: t.mode,
+		announcement: R[t.mode]
+	},
 	INPUT_CONSTANT: (e, t) => {
 		let n = p(t.constant === "pi" ? Math.PI : Math.E), r = t.constant === "pi" ? "pi" : "e";
 		return {
@@ -416,12 +421,17 @@ function H() {
 		r({ type: "TOGGLE_ANGLE_MODE" });
 	}, []), m = e((e) => {
 		r({
+			type: "SET_ANGLE_MODE",
+			mode: e
+		});
+	}, []), h = e((e) => {
+		r({
 			type: "INPUT_CONSTANT",
 			constant: e
 		});
-	}, []), h = e(() => {
-		r({ type: "OPEN_PAREN" });
 	}, []), g = e(() => {
+		r({ type: "OPEN_PAREN" });
+	}, []), _ = e(() => {
 		r({ type: "CLOSE_PAREN" });
 	}, []);
 	return {
@@ -436,9 +446,10 @@ function H() {
 		backspace: d,
 		applyScientificFunction: f,
 		toggleAngleMode: p,
-		inputConstant: m,
-		openParen: h,
-		closeParen: g
+		setAngleMode: m,
+		inputConstant: h,
+		openParen: g,
+		closeParen: _
 	};
 }
 //#endregion
@@ -646,267 +657,164 @@ function X(e) {
 }
 //#endregion
 //#region src/components/Calculator/ScientificPanel.tsx
-function Z({ count: e }) {
-	return /* @__PURE__ */ i(r, { children: Array.from({ length: e }).map((e, t) => /* @__PURE__ */ i("span", {
+function Z() {
+	return /* @__PURE__ */ i("span", {
 		className: "calc-btn-spacer",
 		"aria-hidden": "true"
-	}, t)) });
+	});
 }
-function Q(e) {
-	let { onOpenParen: t, onCloseParen: n, onScientificFunction: o, onOperator: s, isSecondFunction: c, onToggleSecondFunction: l } = e;
-	return /* @__PURE__ */ a(r, { children: [
-		/* @__PURE__ */ i(U, {
-			label: "(",
-			ariaLabel: "Open parenthesis",
-			variant: "scientific",
-			onClick: t
-		}),
-		/* @__PURE__ */ i(U, {
-			label: ")",
-			ariaLabel: "Close parenthesis",
-			variant: "scientific",
-			onClick: n
-		}),
-		/* @__PURE__ */ i(U, {
-			label: c ? "x³" : "x²",
-			caption: c ? "x²" : "x³",
-			ariaLabel: c ? "x cubed" : "x squared",
-			variant: "scientific",
-			onClick: () => {
-				o(c ? "cube" : "square");
-			}
-		}),
-		/* @__PURE__ */ i(U, {
-			label: c ? "ⁿ√x" : "xⁿ",
-			caption: c ? "xⁿ" : "ⁿ√x",
-			ariaLabel: c ? "nth root of x" : "x to the power of n",
-			variant: "scientific",
-			onClick: () => {
-				s(c ? "nthRoot" : "^");
-			}
-		}),
-		/* @__PURE__ */ i(U, {
-			label: c ? "10ˣ" : "eˣ",
-			caption: c ? "eˣ" : "10ˣ",
-			ariaLabel: c ? "10 to the power of x" : "e to the power of x",
-			variant: "scientific",
-			onClick: () => {
-				o(c ? "tenPow" : "exp");
-			}
-		}),
-		/* @__PURE__ */ i(U, {
-			label: "2nd",
-			ariaLabel: c ? "Second function active, click for primary" : "Second function",
-			variant: "scientific",
-			className: c ? "calc-btn--second-active" : "",
-			onClick: l
+function Q() {
+	return /* @__PURE__ */ i("svg", {
+		width: "14",
+		height: "14",
+		viewBox: "0 0 14 14",
+		fill: "none",
+		"aria-hidden": "true",
+		children: /* @__PURE__ */ i("path", {
+			d: "M2.2 4.2A4.6 4.6 0 0 1 11 3.2M11 1.4v2.2H8.8M11.8 9.8A4.6 4.6 0 0 1 3 10.8M3 12.6V10.4h2.2",
+			stroke: "currentColor",
+			strokeWidth: "1.3",
+			strokeLinecap: "round",
+			strokeLinejoin: "round"
 		})
-	] });
+	});
 }
-function $(e) {
-	let { onScientificFunction: t, isSecondFunction: n, onConstant: o } = e;
-	return /* @__PURE__ */ a(r, { children: [
-		/* @__PURE__ */ i(U, {
-			label: "1/x",
-			ariaLabel: "Reciprocal",
-			variant: "scientific",
-			onClick: () => {
-				t("reciprocal");
-			}
-		}),
-		/* @__PURE__ */ i(U, {
-			label: n ? "∛x" : "√x",
-			caption: n ? "√x" : "∛x",
-			ariaLabel: n ? "Cube root" : "Square root",
-			variant: "scientific",
-			onClick: () => {
-				t(n ? "cbrt" : "sqrt");
-			}
-		}),
-		/* @__PURE__ */ i(U, {
-			label: "x!",
-			ariaLabel: "Factorial",
-			variant: "scientific",
-			onClick: () => {
-				t("factorial");
-			}
-		}),
-		/* @__PURE__ */ i(U, {
-			label: n ? "log₁₀" : "ln",
-			caption: n ? "ln" : "log₁₀",
-			ariaLabel: n ? "Log base 10" : "Natural log",
-			variant: "scientific",
-			onClick: () => {
-				t(n ? "log10" : "ln");
-			}
-		}),
-		/* @__PURE__ */ i(U, {
-			label: "e",
-			ariaLabel: "Euler's number e",
-			variant: "scientific",
-			onClick: () => {
-				o("e");
-			}
-		}),
-		/* @__PURE__ */ i(U, {
-			label: "π",
-			ariaLabel: "Pi",
-			variant: "scientific",
-			onClick: () => {
-				o("pi");
-			}
-		})
-	] });
-}
-function ee(e) {
-	let { onScientificFunction: t, isSecondFunction: n } = e, o = [
-		{
-			fn: "sin",
-			inverse: "asin",
-			label: "sin"
-		},
-		{
-			fn: "cos",
-			inverse: "acos",
-			label: "cos"
-		},
-		{
-			fn: "tan",
-			inverse: "atan",
-			label: "tan"
-		}
-	], s = [
-		{
-			fn: "sinh",
-			inverse: "asinh",
-			label: "sinh"
-		},
-		{
-			fn: "cosh",
-			inverse: "acosh",
-			label: "cosh"
-		},
-		{
-			fn: "tanh",
-			inverse: "atanh",
-			label: "tanh"
-		}
-	], c = (e) => n ? `${e.label}⁻¹` : e.label, l = (e) => n ? e.label : `${e.label}⁻¹`, u = (e) => {
-		let t = e.label === "sin" ? "Sine" : e.label === "cos" ? "Cosine" : "Tangent", r = e.label === "sin" ? "Arc sine" : e.label === "cos" ? "Arc cosine" : "Arc tangent";
-		return n ? r : t;
-	}, d = (e) => n ? `${e.label}⁻¹` : e.label, f = (e) => n ? e.label : `${e.label}⁻¹`, p = (e) => {
-		let t = e.label === "sinh" ? "Hyperbolic sine" : e.label === "cosh" ? "Hyperbolic cosine" : "Hyperbolic tangent", r = e.label === "sinh" ? "Inverse hyperbolic sine" : e.label === "cosh" ? "Inverse hyperbolic cosine" : "Inverse hyperbolic tangent";
-		return n ? r : t;
-	};
-	return /* @__PURE__ */ a(r, { children: [o.map((e) => /* @__PURE__ */ i(U, {
-		label: c(e),
-		caption: l(e),
-		ariaLabel: u(e),
-		variant: "scientific",
-		onClick: () => {
-			t(n ? e.inverse : e.fn);
-		}
-	}, e.label)), s.map((e) => /* @__PURE__ */ i(U, {
-		label: d(e),
-		caption: f(e),
-		ariaLabel: p(e),
-		variant: "scientific",
-		onClick: () => {
-			t(n ? e.inverse : e.fn);
-		}
-	}, e.label))] });
-}
-var te = {
-	rad: {
-		label: "Rad",
-		next: "Grad",
-		currentWord: "radians",
-		nextWord: "gradians"
+var ee = [
+	{
+		fn: "sin",
+		inverse: "asin",
+		label: "sin",
+		inverseLabel: "sin⁻¹",
+		name: "Sine",
+		inverseName: "Arc sine"
 	},
-	grad: {
-		label: "Grad",
-		next: "Deg",
-		currentWord: "gradians",
-		nextWord: "degrees"
+	{
+		fn: "cos",
+		inverse: "acos",
+		label: "cos",
+		inverseLabel: "cos⁻¹",
+		name: "Cosine",
+		inverseName: "Arc cosine"
 	},
-	deg: {
-		label: "Deg",
-		next: "Rad",
-		currentWord: "degrees",
-		nextWord: "radians"
+	{
+		fn: "tan",
+		inverse: "atan",
+		label: "tan",
+		inverseLabel: "tan⁻¹",
+		name: "Tangent",
+		inverseName: "Arc tangent"
 	}
-};
-function ne(e) {
-	let { angleMode: t, onToggleAngleMode: n, onScientificFunction: o, isSecondFunction: s } = e, c = te[t];
-	return /* @__PURE__ */ a(r, { children: [
-		/* @__PURE__ */ i(U, {
-			label: c.label,
-			caption: `→ ${c.next}`,
-			ariaLabel: `Currently ${c.currentWord}, switch to ${c.nextWord}`,
-			variant: "scientific",
-			onClick: n
-		}),
-		[
-			{
-				fn: "sec",
-				inverse: "asec",
-				label: "sec",
-				name: "Secant",
-				arc: "Arc secant"
-			},
-			{
-				fn: "csc",
-				inverse: "acsc",
-				label: "cosec",
-				name: "Cosecant",
-				arc: "Arc cosecant"
-			},
-			{
-				fn: "cot",
-				inverse: "acot",
-				label: "cot",
-				name: "Cotangent",
-				arc: "Arc cotangent"
-			}
-		].map((e) => /* @__PURE__ */ i(U, {
-			label: s ? `${e.label}⁻¹` : e.label,
-			caption: s ? e.label : `${e.label}⁻¹`,
-			ariaLabel: s ? e.arc : e.name,
-			variant: "scientific",
-			onClick: () => {
-				o(s ? e.inverse : e.fn);
-			}
-		}, e.fn)),
-		/* @__PURE__ */ i(Z, { count: 2 })
-	] });
+], te = [
+	{
+		fn: "sinh",
+		inverse: "asinh",
+		label: "sinh",
+		inverseLabel: "sinh⁻¹",
+		name: "Hyperbolic sine",
+		inverseName: "Inverse hyperbolic sine"
+	},
+	{
+		fn: "cosh",
+		inverse: "acosh",
+		label: "cosh",
+		inverseLabel: "cosh⁻¹",
+		name: "Hyperbolic cosine",
+		inverseName: "Inverse hyperbolic cosine"
+	},
+	{
+		fn: "tanh",
+		inverse: "atanh",
+		label: "tanh",
+		inverseLabel: "tanh⁻¹",
+		name: "Hyperbolic tangent",
+		inverseName: "Inverse hyperbolic tangent"
+	}
+], ne = [
+	{
+		fn: "csc",
+		inverse: "acsc",
+		label: "cosec",
+		inverseLabel: "cosec⁻¹",
+		name: "Cosecant",
+		inverseName: "Arc cosecant"
+	},
+	{
+		fn: "sec",
+		inverse: "asec",
+		label: "sec",
+		inverseLabel: "sec⁻¹",
+		name: "Secant",
+		inverseName: "Arc secant"
+	},
+	{
+		fn: "cot",
+		inverse: "acot",
+		label: "cot",
+		inverseLabel: "cot⁻¹",
+		name: "Cotangent",
+		inverseName: "Arc cotangent"
+	}
+], re = [
+	{
+		mode: "rad",
+		label: "Rad",
+		name: "Radians"
+	},
+	{
+		mode: "grad",
+		label: "Grad",
+		name: "Gradians"
+	},
+	{
+		mode: "deg",
+		label: "Deg",
+		name: "Degrees"
+	}
+];
+function $({ keys: e, inverted: t, onScientificFunction: n }) {
+	return /* @__PURE__ */ i(r, { children: e.map((e) => /* @__PURE__ */ i(U, {
+		label: t ? e.inverseLabel : e.label,
+		ariaLabel: t ? e.inverseName : e.name,
+		variant: "scientific",
+		onClick: () => {
+			n(t ? e.inverse : e.fn);
+		}
+	}, e.fn)) });
 }
-function re(e) {
-	return /* @__PURE__ */ a("div", {
+function ie(e) {
+	let { isSecondFunction: t, onToggleSecondFunction: n, onScientificFunction: o, onOperator: s, onConstant: c, onOpenParen: l, onCloseParen: u, onBackspace: d, onSetAngleMode: f, onDigit: p, onDecimal: m, onEquals: h, onClear: g, onToggleSign: _, onPercent: v, angleMode: y, activeOperator: b, waitingForOperand: x } = e, S = (e) => b === e && x;
+	return /* @__PURE__ */ a(r, { children: [/* @__PURE__ */ i("div", {
+		className: "calc-invert-row",
+		children: /* @__PURE__ */ a("button", {
+			type: "button",
+			className: "calc-invert-toggle",
+			"aria-pressed": t,
+			"aria-label": "Invert Functions",
+			onClick: n,
+			children: [/* @__PURE__ */ i(Q, {}), "Invert Functions"]
+		})
+	}), /* @__PURE__ */ a("div", {
 		className: "calc-buttons calc-buttons--scientific",
 		"data-testid": "button-grid",
 		children: [
-			/* @__PURE__ */ i(Q, { ...e }),
-			/* @__PURE__ */ i(G, { ...e }),
-			/* @__PURE__ */ i($, { ...e }),
-			/* @__PURE__ */ i(K, { ...e }),
-			/* @__PURE__ */ i(ee, { ...e }),
-			/* @__PURE__ */ i(q, { ...e }),
-			/* @__PURE__ */ i(ne, { ...e }),
-			/* @__PURE__ */ i(J, { ...e }),
 			/* @__PURE__ */ i(U, {
-				label: "|x|",
-				ariaLabel: "Absolute value",
+				label: "(",
+				ariaLabel: "Open parenthesis",
 				variant: "scientific",
-				onClick: () => {
-					e.onScientificFunction("abs");
-				}
+				onClick: l
+			}),
+			/* @__PURE__ */ i(U, {
+				label: ")",
+				ariaLabel: "Close parenthesis",
+				variant: "scientific",
+				onClick: u
 			}),
 			/* @__PURE__ */ i(U, {
 				label: "nCr",
 				ariaLabel: "Combinations",
 				variant: "scientific",
 				onClick: () => {
-					e.onOperator("nCr");
+					s("nCr");
 				}
 			}),
 			/* @__PURE__ */ i(U, {
@@ -914,22 +822,259 @@ function re(e) {
 				ariaLabel: "Permutations",
 				variant: "scientific",
 				onClick: () => {
-					e.onOperator("nPr");
+					s("nPr");
 				}
 			}),
-			/* @__PURE__ */ i(Z, { count: 3 }),
-			/* @__PURE__ */ i(Y, { ...e })
+			/* @__PURE__ */ i(Z, {}),
+			/* @__PURE__ */ i(Z, {}),
+			/* @__PURE__ */ i(Z, {}),
+			/* @__PURE__ */ i(U, {
+				label: "⌫",
+				ariaLabel: "Backspace",
+				variant: "function",
+				onClick: d
+			}),
+			/* @__PURE__ */ i(U, {
+				label: "AC",
+				ariaLabel: "All clear",
+				variant: "function",
+				onClick: g
+			}),
+			/* @__PURE__ */ i(U, {
+				label: "%",
+				ariaLabel: "Percent",
+				variant: "function",
+				onClick: v
+			}),
+			/* @__PURE__ */ i(U, {
+				label: "÷",
+				ariaLabel: "Divide",
+				variant: "operator",
+				pressed: S("/"),
+				onClick: () => {
+					s("/");
+				}
+			}),
+			/* @__PURE__ */ i($, {
+				keys: ee,
+				inverted: t,
+				onScientificFunction: o
+			}),
+			/* @__PURE__ */ i(U, {
+				label: "e",
+				ariaLabel: "Euler's number e",
+				variant: "scientific",
+				onClick: () => {
+					c("e");
+				}
+			}),
+			/* @__PURE__ */ i(U, {
+				label: "eˣ",
+				ariaLabel: "e to the power of x",
+				variant: "scientific",
+				onClick: () => {
+					o("exp");
+				}
+			}),
+			/* @__PURE__ */ i(U, {
+				label: "x²",
+				ariaLabel: "x squared",
+				variant: "scientific",
+				onClick: () => {
+					o("square");
+				}
+			}),
+			/* @__PURE__ */ i(U, {
+				label: "x³",
+				ariaLabel: "x cubed",
+				variant: "scientific",
+				onClick: () => {
+					o("cube");
+				}
+			}),
+			/* @__PURE__ */ i(U, {
+				label: "7",
+				ariaLabel: "7",
+				onClick: () => p("7")
+			}),
+			/* @__PURE__ */ i(U, {
+				label: "8",
+				ariaLabel: "8",
+				onClick: () => p("8")
+			}),
+			/* @__PURE__ */ i(U, {
+				label: "9",
+				ariaLabel: "9",
+				onClick: () => p("9")
+			}),
+			/* @__PURE__ */ i(U, {
+				label: "×",
+				ariaLabel: "Multiply",
+				variant: "operator",
+				pressed: S("*"),
+				onClick: () => s("*")
+			}),
+			/* @__PURE__ */ i($, {
+				keys: te,
+				inverted: t,
+				onScientificFunction: o
+			}),
+			/* @__PURE__ */ i(U, {
+				label: "xⁿ",
+				ariaLabel: "x to the power of n",
+				variant: "scientific",
+				onClick: () => s("^")
+			}),
+			/* @__PURE__ */ i(U, {
+				label: "10ˣ",
+				ariaLabel: "10 to the power of x",
+				variant: "scientific",
+				onClick: () => o("tenPow")
+			}),
+			/* @__PURE__ */ i(U, {
+				label: "1/x",
+				ariaLabel: "Reciprocal",
+				variant: "scientific",
+				onClick: () => o("reciprocal")
+			}),
+			/* @__PURE__ */ i(U, {
+				label: "x!",
+				ariaLabel: "Factorial",
+				variant: "scientific",
+				onClick: () => o("factorial")
+			}),
+			/* @__PURE__ */ i(U, {
+				label: "4",
+				ariaLabel: "4",
+				onClick: () => p("4")
+			}),
+			/* @__PURE__ */ i(U, {
+				label: "5",
+				ariaLabel: "5",
+				onClick: () => p("5")
+			}),
+			/* @__PURE__ */ i(U, {
+				label: "6",
+				ariaLabel: "6",
+				onClick: () => p("6")
+			}),
+			/* @__PURE__ */ i(U, {
+				label: "−",
+				ariaLabel: "Subtract",
+				variant: "operator",
+				pressed: S("-"),
+				onClick: () => s("-")
+			}),
+			/* @__PURE__ */ i($, {
+				keys: ne,
+				inverted: t,
+				onScientificFunction: o
+			}),
+			/* @__PURE__ */ i(U, {
+				label: "√x",
+				ariaLabel: "Square root",
+				variant: "scientific",
+				onClick: () => o("sqrt")
+			}),
+			/* @__PURE__ */ i(U, {
+				label: "∛x",
+				ariaLabel: "Cube root",
+				variant: "scientific",
+				onClick: () => o("cbrt")
+			}),
+			/* @__PURE__ */ i(U, {
+				label: "ⁿ√x",
+				ariaLabel: "nth root of x",
+				variant: "scientific",
+				onClick: () => s("nthRoot")
+			}),
+			/* @__PURE__ */ i(U, {
+				label: "|x|",
+				ariaLabel: "Absolute value",
+				variant: "scientific",
+				onClick: () => o("abs")
+			}),
+			/* @__PURE__ */ i(U, {
+				label: "1",
+				ariaLabel: "1",
+				onClick: () => p("1")
+			}),
+			/* @__PURE__ */ i(U, {
+				label: "2",
+				ariaLabel: "2",
+				onClick: () => p("2")
+			}),
+			/* @__PURE__ */ i(U, {
+				label: "3",
+				ariaLabel: "3",
+				onClick: () => p("3")
+			}),
+			/* @__PURE__ */ i(U, {
+				label: "+",
+				ariaLabel: "Add",
+				variant: "operator",
+				pressed: S("+"),
+				onClick: () => s("+")
+			}),
+			re.map((e) => /* @__PURE__ */ i(U, {
+				label: e.label,
+				ariaLabel: y === e.mode ? `${e.name}, selected` : `Switch to ${e.name.toLowerCase()}`,
+				variant: y === e.mode ? "operator" : "scientific",
+				"aria-pressed": y === e.mode,
+				onClick: () => f(e.mode)
+			}, e.mode)),
+			/* @__PURE__ */ i(U, {
+				label: "ln",
+				ariaLabel: "Natural log",
+				variant: "scientific",
+				onClick: () => o("ln")
+			}),
+			/* @__PURE__ */ i(U, {
+				label: "log₁₀",
+				ariaLabel: "Log base 10",
+				variant: "scientific",
+				onClick: () => o("log10")
+			}),
+			/* @__PURE__ */ i(U, {
+				label: "π",
+				ariaLabel: "Pi",
+				variant: "scientific",
+				onClick: () => c("pi")
+			}),
+			/* @__PURE__ */ i(Z, {}),
+			/* @__PURE__ */ i(U, {
+				label: "+/−",
+				ariaLabel: "Toggle positive negative",
+				variant: "function",
+				onClick: _
+			}),
+			/* @__PURE__ */ i(U, {
+				label: "0",
+				ariaLabel: "0",
+				onClick: () => p("0")
+			}),
+			/* @__PURE__ */ i(U, {
+				label: ".",
+				ariaLabel: "Decimal point",
+				onClick: m
+			}),
+			/* @__PURE__ */ i(U, {
+				label: "=",
+				ariaLabel: "Equals",
+				variant: "operator",
+				onClick: h
+			})
 		]
-	});
+	})] });
 }
 //#endregion
 //#region src/components/Calculator/ButtonPanel.tsx
-function ie(e) {
-	return e.mode === "scientific" ? /* @__PURE__ */ i(re, { ...e }) : /* @__PURE__ */ i(X, { ...e });
+function ae(e) {
+	return e.mode === "scientific" ? /* @__PURE__ */ i(ie, { ...e }) : /* @__PURE__ */ i(X, { ...e });
 }
 //#endregion
 //#region src/components/Calculator/Display.tsx
-function ae({ value: e, expression: t, mode: n, angleMode: r, parenDepth: o = 0 }) {
+function oe({ value: e, expression: t, mode: n, angleMode: r, parenDepth: o = 0 }) {
 	let s = e === "Error" ? "Error" : parseFloat(e) < 0 ? `negative ${Math.abs(parseFloat(e))}` : e, c = n === "scientific";
 	return /* @__PURE__ */ a("div", {
 		className: "calc-display",
@@ -960,21 +1105,21 @@ function ae({ value: e, expression: t, mode: n, angleMode: r, parenDepth: o = 0 
 }
 //#endregion
 //#region src/components/Calculator/Calculator.tsx
-var oe = {
+var se = {
 	"+": "+",
 	"-": "-",
 	"*": "*",
 	"/": "/",
 	"^": "^"
 };
-function se({ theme: t, initialMode: r = "basic" }) {
-	let { displayValue: o, operator: s, waitingForOperand: c, expression: l, announcement: u, announcementKey: d, angleMode: f, parenDepth: p, inputDigit: m, inputDecimal: h, inputOperator: g, performCalculation: _, clearAll: v, toggleSign: y, inputPercent: b, backspace: x, applyScientificFunction: S, toggleAngleMode: C, inputConstant: w, openParen: T, closeParen: E } = H(), [D, O] = n(r), [k, A] = n(!1), j = e(() => {
-		O((e) => e === "basic" ? "scientific" : "basic");
-	}, []), M = e(() => {
-		A((e) => !e);
-	}, []), N = e((e) => {
-		let { key: t } = e, n = oe[t];
-		t >= "0" && t <= "9" ? (e.preventDefault(), m(t)) : t === "." ? (e.preventDefault(), h()) : n === void 0 ? t === "Enter" || t === "=" ? (e.preventDefault(), _()) : t === "Escape" ? (e.preventDefault(), v()) : t === "Backspace" ? (e.preventDefault(), x()) : t === "%" ? (e.preventDefault(), b()) : t === "(" && D === "scientific" ? (e.preventDefault(), T()) : t === ")" && D === "scientific" && (e.preventDefault(), E()) : (e.preventDefault(), g(n));
+function ce({ theme: t, initialMode: r = "basic" }) {
+	let { displayValue: o, operator: s, waitingForOperand: c, expression: l, announcement: u, announcementKey: d, angleMode: f, parenDepth: p, inputDigit: m, inputDecimal: h, inputOperator: g, performCalculation: _, clearAll: v, toggleSign: y, inputPercent: b, backspace: x, applyScientificFunction: S, toggleAngleMode: C, setAngleMode: w, inputConstant: T, openParen: E, closeParen: D } = H(), [O, k] = n(r), [A, j] = n(!1), M = e(() => {
+		k((e) => e === "basic" ? "scientific" : "basic");
+	}, []), N = e(() => {
+		j((e) => !e);
+	}, []), P = e((e) => {
+		let { key: t } = e, n = se[t];
+		t >= "0" && t <= "9" ? (e.preventDefault(), m(t)) : t === "." ? (e.preventDefault(), h()) : n === void 0 ? t === "Enter" || t === "=" ? (e.preventDefault(), _()) : t === "Escape" ? (e.preventDefault(), v()) : t === "Backspace" ? (e.preventDefault(), x()) : t === "%" ? (e.preventDefault(), b()) : t === "(" && O === "scientific" ? (e.preventDefault(), E()) : t === ")" && O === "scientific" && (e.preventDefault(), D()) : (e.preventDefault(), g(n));
 	}, [
 		m,
 		h,
@@ -983,18 +1128,18 @@ function se({ theme: t, initialMode: r = "basic" }) {
 		v,
 		x,
 		b,
-		T,
 		E,
-		D
-	]), P = t ? Object.fromEntries(Object.entries(t).map(([e, t]) => [`--${e}`, t])) : void 0;
+		D,
+		O
+	]), F = t ? Object.fromEntries(Object.entries(t).map(([e, t]) => [`--${e}`, t])) : void 0;
 	return /* @__PURE__ */ a("div", {
-		className: D === "scientific" ? "calculator calculator--scientific" : "calculator",
-		style: P,
+		className: O === "scientific" ? "calculator calculator--scientific" : "calculator",
+		style: F,
 		role: "application",
 		"aria-label": "Calculator",
 		"aria-roledescription": "calculator",
 		tabIndex: 0,
-		onKeyDown: N,
+		onKeyDown: P,
 		children: [
 			/* @__PURE__ */ i("div", {
 				className: "sr-only",
@@ -1010,21 +1155,21 @@ function se({ theme: t, initialMode: r = "basic" }) {
 				children: /* @__PURE__ */ i("button", {
 					type: "button",
 					className: "calc-mode-toggle",
-					"aria-pressed": D === "scientific",
-					onClick: j,
+					"aria-pressed": O === "scientific",
+					onClick: M,
 					"data-testid": "mode-toggle",
-					children: D === "scientific" ? "Basic" : "Scientific"
+					children: O === "scientific" ? "Basic" : "Scientific"
 				})
 			}),
-			/* @__PURE__ */ i(ae, {
+			/* @__PURE__ */ i(oe, {
 				value: o,
 				expression: l,
-				mode: D,
+				mode: O,
 				angleMode: f,
 				parenDepth: p
 			}),
-			/* @__PURE__ */ i(ie, {
-				mode: D,
+			/* @__PURE__ */ i(ae, {
+				mode: O,
 				onDigit: m,
 				onDecimal: h,
 				onOperator: g,
@@ -1035,18 +1180,20 @@ function se({ theme: t, initialMode: r = "basic" }) {
 				activeOperator: s,
 				waitingForOperand: c,
 				angleMode: f,
-				isSecondFunction: k,
+				isSecondFunction: A,
 				onScientificFunction: S,
 				onToggleAngleMode: C,
-				onToggleSecondFunction: M,
-				onConstant: w,
-				onOpenParen: T,
-				onCloseParen: E
+				onSetAngleMode: w,
+				onBackspace: x,
+				onToggleSecondFunction: N,
+				onConstant: T,
+				onOpenParen: E,
+				onCloseParen: D
 			})
 		]
 	});
 }
 //#endregion
-export { se as Calculator };
+export { ce as Calculator };
 
 //# sourceMappingURL=index.mjs.map

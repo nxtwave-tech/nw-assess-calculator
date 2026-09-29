@@ -1,8 +1,8 @@
 import { ButtonPanelProps } from './ButtonPanel';
 import { ReactElement } from 'react';
 /**
- * 10-column scientific calculator grid. Columns 1-6 host the scientific
- * functions (paren, power, trig, hyperbolic, constants, angle mode); columns
- * 7-10 reuse the shared standard rows.
+ * Scientific keypad from the assessment design. Eleven columns: seven function
+ * keys on the left and the four-column number pad on the right. Invert
+ * Functions only swaps the three trig rows.
  */
 export declare function ScientificPanel(props: ButtonPanelProps): ReactElement;

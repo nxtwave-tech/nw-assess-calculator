@@ -3,7 +3,7 @@ import { useCallback, useReducer } from 'react';
 import { calculate, formatDisplay, operatorToWord } from '../utils/calculate';
 import { evaluateScientificFunction, scientificFunctionToWord } from '../utils/scientificCalculate';
 
-import type { CalculatorState, Operator, ScientificFunction } from '../types/calculator';
+import type { AngleMode, CalculatorState, Operator, ScientificFunction } from '../types/calculator';
 
 type Action =
   | { type: 'INPUT_DIGIT'; digit: string }
@@ -16,6 +16,7 @@ type Action =
   | { type: 'BACKSPACE' }
   | { type: 'APPLY_SCIENTIFIC_FUNCTION'; fn: ScientificFunction }
   | { type: 'TOGGLE_ANGLE_MODE' }
+  | { type: 'SET_ANGLE_MODE'; mode: AngleMode }
   | { type: 'INPUT_CONSTANT'; constant: 'pi' | 'e' }
   | { type: 'OPEN_PAREN' }
   | { type: 'CLOSE_PAREN' };
@@ -190,6 +191,15 @@ const handleToggleAngleMode: Handler<'TOGGLE_ANGLE_MODE'> = (state) => {
   };
 };
 
+const handleSetAngleMode: Handler<'SET_ANGLE_MODE'> = (state, action) => {
+  if (state.angleMode === action.mode) return state;
+  return {
+    ...state,
+    angleMode: action.mode,
+    announcement: ANGLE_MODE_ANNOUNCEMENT[action.mode],
+  };
+};
+
 const handleInputConstant: Handler<'INPUT_CONSTANT'> = (state, action) => {
   const value = action.constant === 'pi' ? Math.PI : Math.E;
   const display = formatDisplay(value);
@@ -256,6 +266,7 @@ const handlers: HandlerMap = {
   BACKSPACE: handleBackspace,
   APPLY_SCIENTIFIC_FUNCTION: handleApplyScientific,
   TOGGLE_ANGLE_MODE: handleToggleAngleMode,
+  SET_ANGLE_MODE: handleSetAngleMode,
   INPUT_CONSTANT: handleInputConstant,
   OPEN_PAREN: handleOpenParen,
   CLOSE_PAREN: handleCloseParen,
@@ -292,6 +303,7 @@ export function useCalculator(): CalculatorState & {
   backspace: () => void;
   applyScientificFunction: (fn: ScientificFunction) => void;
   toggleAngleMode: () => void;
+  setAngleMode: (mode: AngleMode) => void;
   inputConstant: (constant: 'pi' | 'e') => void;
   openParen: () => void;
   closeParen: () => void;
@@ -328,6 +340,9 @@ export function useCalculator(): CalculatorState & {
   const toggleAngleMode = useCallback(() => {
     dispatch({ type: 'TOGGLE_ANGLE_MODE' });
   }, []);
+  const setAngleMode = useCallback((mode: AngleMode) => {
+    dispatch({ type: 'SET_ANGLE_MODE', mode });
+  }, []);
   const inputConstant = useCallback((constant: 'pi' | 'e') => {
     dispatch({ type: 'INPUT_CONSTANT', constant });
   }, []);
@@ -350,6 +365,7 @@ export function useCalculator(): CalculatorState & {
     backspace,
     applyScientificFunction,
     toggleAngleMode,
+    setAngleMode,
     inputConstant,
     openParen,
     closeParen,

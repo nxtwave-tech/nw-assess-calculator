@@ -720,10 +720,10 @@ describe('Calculator', () => {
       expect(getDisplay()).toHaveTextContent('0.25');
     });
 
-    it('2nd toggle switches function labels', async () => {
+    it('Invert Functions switches sine to arc sine', async () => {
       const { user } = renderScientificCalculator();
       expect(btn('Sine')).toBeInTheDocument();
-      await user.click(btn('Second function'));
+      await user.click(btn('Invert Functions'));
       expect(btn('Arc sine')).toBeInTheDocument();
     });
   });
@@ -747,10 +747,10 @@ describe('Calculator', () => {
       expect(btn('x to the power of n')).toBeInTheDocument();
     });
 
-    it('renders e to the power of x and Second function buttons', () => {
+    it('renders e to the power of x and Invert Functions', () => {
       renderScientific();
       expect(btn('e to the power of x')).toBeInTheDocument();
-      expect(btn('Second function')).toBeInTheDocument();
+      expect(btn('Invert Functions')).toBeInTheDocument();
     });
 
     it('renders Reciprocal, Square root, Factorial, Natural log, Pi, and Euler buttons', () => {
@@ -773,76 +773,36 @@ describe('Calculator', () => {
       expect(btn('Hyperbolic tangent')).toBeInTheDocument();
     });
 
-    it('renders the angle mode toggle button showing current mode', () => {
+    it('renders separate angle mode buttons and starts on radians', () => {
       renderScientific();
-      // Default angleMode is 'rad'
-      expect(btn('Currently radians, switch to gradians')).toBeInTheDocument();
+      expect(btn('Radians, selected')).toBeInTheDocument();
+      expect(btn('Switch to gradians')).toBeInTheDocument();
+      expect(btn('Switch to degrees')).toBeInTheDocument();
     });
 
-    it('toggling angle mode changes button label', async () => {
+    it('selecting gradians marks that button selected', async () => {
       const { user } = renderScientific();
-      await user.click(btn('Currently radians, switch to gradians'));
-      expect(btn('Currently gradians, switch to degrees')).toBeInTheDocument();
+      await user.click(btn('Switch to gradians'));
+      expect(btn('Gradians, selected')).toBeInTheDocument();
     });
 
-    it('2nd toggle changes x squared to x cubed', async () => {
-      const { user } = renderScientific();
+    it('shows x squared and x cubed at the same time', () => {
+      renderScientific();
       expect(btn('x squared')).toBeInTheDocument();
-      await user.click(btn('Second function'));
       expect(btn('x cubed')).toBeInTheDocument();
-    });
-
-    it('2nd toggle changes sqrt to cube root', async () => {
-      const { user } = renderScientific();
-      await user.click(btn('Second function'));
       expect(btn('Cube root')).toBeInTheDocument();
-    });
-
-    it('2nd toggle changes ln to Log base 10', async () => {
-      const { user } = renderScientific();
-      await user.click(btn('Second function'));
       expect(btn('Log base 10')).toBeInTheDocument();
-    });
-
-    it('2nd toggle changes eˣ to 10 to the power of x', async () => {
-      const { user } = renderScientific();
-      await user.click(btn('Second function'));
       expect(btn('10 to the power of x')).toBeInTheDocument();
     });
 
-    it('2nd toggle changes Sine to Arc sine', async () => {
+    it('Invert Functions changes Sine to Arc sine', async () => {
       const { user } = renderScientific();
-      await user.click(btn('Second function'));
+      await user.click(btn('Invert Functions'));
       expect(btn('Arc sine')).toBeInTheDocument();
-    });
-
-    it('2nd toggle changes Cosine to Arc cosine', async () => {
-      const { user } = renderScientific();
-      await user.click(btn('Second function'));
       expect(btn('Arc cosine')).toBeInTheDocument();
-    });
-
-    it('2nd toggle changes Tangent to Arc tangent', async () => {
-      const { user } = renderScientific();
-      await user.click(btn('Second function'));
       expect(btn('Arc tangent')).toBeInTheDocument();
-    });
-
-    it('2nd toggle changes Hyperbolic sine to Inverse hyperbolic sine', async () => {
-      const { user } = renderScientific();
-      await user.click(btn('Second function'));
       expect(btn('Inverse hyperbolic sine')).toBeInTheDocument();
-    });
-
-    it('2nd toggle changes Hyperbolic cosine to Inverse hyperbolic cosine', async () => {
-      const { user } = renderScientific();
-      await user.click(btn('Second function'));
       expect(btn('Inverse hyperbolic cosine')).toBeInTheDocument();
-    });
-
-    it('2nd toggle changes Hyperbolic tangent to Inverse hyperbolic tangent', async () => {
-      const { user } = renderScientific();
-      await user.click(btn('Second function'));
       expect(btn('Inverse hyperbolic tangent')).toBeInTheDocument();
     });
 
@@ -894,7 +854,7 @@ describe('Calculator', () => {
 
     it('shows GRAD indicator after toggling angle mode', async () => {
       const { user } = renderScientific();
-      await user.click(btn('Currently radians, switch to gradians'));
+      await user.click(btn('Switch to gradians'));
       const infoPanel = document.querySelector('.calc-display__info');
       expect(infoPanel!.textContent).toContain('GRAD');
     });

@@ -1,4 +1,4 @@
-import { CalculatorState, Operator, ScientificFunction } from '../types/calculator';
+import { AngleMode, CalculatorState, Operator, ScientificFunction } from '../types/calculator';
 /**
  * Calculator state hook. Wraps a `useReducer` exposing the full calculator
  * state plus action dispatchers for every user-facing interaction (digits,
@@ -17,6 +17,7 @@ export declare function useCalculator(): CalculatorState & {
     backspace: () => void;
     applyScientificFunction: (fn: ScientificFunction) => void;
     toggleAngleMode: () => void;
+    setAngleMode: (mode: AngleMode) => void;
     inputConstant: (constant: 'pi' | 'e') => void;
     openParen: () => void;
     closeParen: () => void;
