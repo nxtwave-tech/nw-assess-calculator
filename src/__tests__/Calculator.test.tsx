@@ -634,6 +634,12 @@ describe('Calculator', () => {
       expect(screen.getByTestId('mode-toggle')).toBeInTheDocument();
     });
 
+    it('omits the mode toggle when showModeToggle is false', () => {
+      render(<Calculator initialMode="scientific" showModeToggle={false} />);
+      expect(screen.queryByTestId('mode-toggle')).not.toBeInTheDocument();
+      expect(btn('Sine')).toBeInTheDocument();
+    });
+
     it('starts in basic mode', () => {
       renderCalculator();
       expect(screen.getByTestId('mode-toggle')).toHaveTextContent('Scientific');

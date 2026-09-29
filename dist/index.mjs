@@ -313,7 +313,7 @@ var O = (e, t) => {
 	rad: "Switched to radians",
 	grad: "Switched to gradians",
 	deg: "Switched to degrees"
-}, ee = {
+}, z = {
 	INPUT_DIGIT: O,
 	INPUT_DECIMAL: k,
 	INPUT_OPERATOR: A,
@@ -378,19 +378,19 @@ var O = (e, t) => {
 		} : e;
 	}
 };
-function z(e, t) {
-	let n = ee[t.type];
+function B(e, t) {
+	let n = z[t.type];
 	return n(e, t);
 }
-function B(e, t) {
-	let n = z(e, t);
+function V(e, t) {
+	let n = B(e, t);
 	return n.announcement && n !== e ? {
 		...n,
 		announcementKey: e.announcementKey + 1
 	} : n;
 }
-function V() {
-	let [n, r] = t(B, E), i = e((e) => {
+function H() {
+	let [n, r] = t(V, E), i = e((e) => {
 		r({
 			type: "INPUT_DIGIT",
 			digit: e
@@ -454,7 +454,7 @@ function V() {
 }
 //#endregion
 //#region src/components/Calculator/CalcButton.tsx
-function H({ label: e, ariaLabel: t, variant: n = "number", wide: r = !1, pressed: o, caption: s, className: c = "", ...l }) {
+function U({ label: e, ariaLabel: t, variant: n = "number", wide: r = !1, pressed: o, caption: s, className: c = "", ...l }) {
 	let u = [
 		"calc-btn",
 		`calc-btn--${n}`,
@@ -476,72 +476,37 @@ function H({ label: e, ariaLabel: t, variant: n = "number", wide: r = !1, presse
 }
 //#endregion
 //#region src/components/Calculator/StandardRows.tsx
-function U(e, t) {
+function W(e, t) {
 	return t.activeOperator === e && t.waitingForOperand;
 }
-function W(e) {
+function G(e) {
 	let { onClear: t, onToggleSign: n, onPercent: o, onOperator: s } = e;
 	return /* @__PURE__ */ a(r, { children: [
-		/* @__PURE__ */ i(H, {
+		/* @__PURE__ */ i(U, {
 			label: "AC",
 			ariaLabel: "All clear",
 			variant: "function",
 			onClick: t
 		}),
-		/* @__PURE__ */ i(H, {
+		/* @__PURE__ */ i(U, {
 			label: "+/−",
 			ariaLabel: "Toggle positive negative",
 			variant: "function",
 			onClick: n
 		}),
-		/* @__PURE__ */ i(H, {
+		/* @__PURE__ */ i(U, {
 			label: "%",
 			ariaLabel: "Percent",
 			variant: "function",
 			onClick: o
 		}),
-		/* @__PURE__ */ i(H, {
+		/* @__PURE__ */ i(U, {
 			label: "÷",
 			ariaLabel: "Divide",
 			variant: "operator",
-			pressed: U("/", e),
+			pressed: W("/", e),
 			onClick: () => {
 				s("/");
-			}
-		})
-	] });
-}
-function G(e) {
-	let { onDigit: t, onOperator: n } = e;
-	return /* @__PURE__ */ a(r, { children: [
-		/* @__PURE__ */ i(H, {
-			label: "7",
-			ariaLabel: "7",
-			onClick: () => {
-				t("7");
-			}
-		}),
-		/* @__PURE__ */ i(H, {
-			label: "8",
-			ariaLabel: "8",
-			onClick: () => {
-				t("8");
-			}
-		}),
-		/* @__PURE__ */ i(H, {
-			label: "9",
-			ariaLabel: "9",
-			onClick: () => {
-				t("9");
-			}
-		}),
-		/* @__PURE__ */ i(H, {
-			label: "×",
-			ariaLabel: "Multiply",
-			variant: "operator",
-			pressed: U("*", e),
-			onClick: () => {
-				n("*");
 			}
 		})
 	] });
@@ -549,34 +514,34 @@ function G(e) {
 function K(e) {
 	let { onDigit: t, onOperator: n } = e;
 	return /* @__PURE__ */ a(r, { children: [
-		/* @__PURE__ */ i(H, {
-			label: "4",
-			ariaLabel: "4",
+		/* @__PURE__ */ i(U, {
+			label: "7",
+			ariaLabel: "7",
 			onClick: () => {
-				t("4");
+				t("7");
 			}
 		}),
-		/* @__PURE__ */ i(H, {
-			label: "5",
-			ariaLabel: "5",
+		/* @__PURE__ */ i(U, {
+			label: "8",
+			ariaLabel: "8",
 			onClick: () => {
-				t("5");
+				t("8");
 			}
 		}),
-		/* @__PURE__ */ i(H, {
-			label: "6",
-			ariaLabel: "6",
+		/* @__PURE__ */ i(U, {
+			label: "9",
+			ariaLabel: "9",
 			onClick: () => {
-				t("6");
+				t("9");
 			}
 		}),
-		/* @__PURE__ */ i(H, {
-			label: "−",
-			ariaLabel: "Subtract",
+		/* @__PURE__ */ i(U, {
+			label: "×",
+			ariaLabel: "Multiply",
 			variant: "operator",
-			pressed: U("-", e),
+			pressed: W("*", e),
 			onClick: () => {
-				n("-");
+				n("*");
 			}
 		})
 	] });
@@ -584,42 +549,77 @@ function K(e) {
 function q(e) {
 	let { onDigit: t, onOperator: n } = e;
 	return /* @__PURE__ */ a(r, { children: [
-		/* @__PURE__ */ i(H, {
+		/* @__PURE__ */ i(U, {
+			label: "4",
+			ariaLabel: "4",
+			onClick: () => {
+				t("4");
+			}
+		}),
+		/* @__PURE__ */ i(U, {
+			label: "5",
+			ariaLabel: "5",
+			onClick: () => {
+				t("5");
+			}
+		}),
+		/* @__PURE__ */ i(U, {
+			label: "6",
+			ariaLabel: "6",
+			onClick: () => {
+				t("6");
+			}
+		}),
+		/* @__PURE__ */ i(U, {
+			label: "−",
+			ariaLabel: "Subtract",
+			variant: "operator",
+			pressed: W("-", e),
+			onClick: () => {
+				n("-");
+			}
+		})
+	] });
+}
+function J(e) {
+	let { onDigit: t, onOperator: n } = e;
+	return /* @__PURE__ */ a(r, { children: [
+		/* @__PURE__ */ i(U, {
 			label: "1",
 			ariaLabel: "1",
 			onClick: () => {
 				t("1");
 			}
 		}),
-		/* @__PURE__ */ i(H, {
+		/* @__PURE__ */ i(U, {
 			label: "2",
 			ariaLabel: "2",
 			onClick: () => {
 				t("2");
 			}
 		}),
-		/* @__PURE__ */ i(H, {
+		/* @__PURE__ */ i(U, {
 			label: "3",
 			ariaLabel: "3",
 			onClick: () => {
 				t("3");
 			}
 		}),
-		/* @__PURE__ */ i(H, {
+		/* @__PURE__ */ i(U, {
 			label: "+",
 			ariaLabel: "Add",
 			variant: "operator",
-			pressed: U("+", e),
+			pressed: W("+", e),
 			onClick: () => {
 				n("+");
 			}
 		})
 	] });
 }
-function J(e) {
+function Y(e) {
 	let { onDigit: t, onDecimal: n, onEquals: o } = e;
 	return /* @__PURE__ */ a(r, { children: [
-		/* @__PURE__ */ i(H, {
+		/* @__PURE__ */ i(U, {
 			label: "0",
 			ariaLabel: "0",
 			wide: !0,
@@ -627,12 +627,12 @@ function J(e) {
 				t("0");
 			}
 		}),
-		/* @__PURE__ */ i(H, {
+		/* @__PURE__ */ i(U, {
 			label: ".",
 			ariaLabel: "Decimal point",
 			onClick: n
 		}),
-		/* @__PURE__ */ i(H, {
+		/* @__PURE__ */ i(U, {
 			label: "=",
 			ariaLabel: "Equals",
 			variant: "operator",
@@ -642,28 +642,28 @@ function J(e) {
 }
 //#endregion
 //#region src/components/Calculator/BasicPanel.tsx
-function Y(e) {
+function X(e) {
 	return /* @__PURE__ */ a("div", {
 		className: "calc-buttons",
 		"data-testid": "button-grid",
 		children: [
-			/* @__PURE__ */ i(W, { ...e }),
 			/* @__PURE__ */ i(G, { ...e }),
 			/* @__PURE__ */ i(K, { ...e }),
 			/* @__PURE__ */ i(q, { ...e }),
-			/* @__PURE__ */ i(J, { ...e })
+			/* @__PURE__ */ i(J, { ...e }),
+			/* @__PURE__ */ i(Y, { ...e })
 		]
 	});
 }
 //#endregion
 //#region src/components/Calculator/ScientificPanel.tsx
-function X() {
+function Z() {
 	return /* @__PURE__ */ i("span", {
 		className: "calc-btn-spacer",
 		"aria-hidden": "true"
 	});
 }
-function Z() {
+function Q() {
 	return /* @__PURE__ */ i("svg", {
 		width: "12",
 		height: "12",
@@ -679,7 +679,7 @@ function Z() {
 		})
 	});
 }
-function Q() {
+function $() {
 	return /* @__PURE__ */ a("svg", {
 		width: "16",
 		height: "12",
@@ -699,7 +699,7 @@ function Q() {
 		})]
 	});
 }
-function te() {
+function ee() {
 	return /* @__PURE__ */ i("svg", {
 		width: "14",
 		height: "14",
@@ -714,7 +714,7 @@ function te() {
 		})
 	});
 }
-var $ = [
+var te = [
 	{
 		fn: "sin",
 		inverse: "asin",
@@ -820,10 +820,10 @@ function re(e) {
 						"aria-pressed": t,
 						"aria-label": "Invert Functions",
 						onClick: n,
-						children: [/* @__PURE__ */ i(Z, {}), "Invert Functions"]
+						children: [/* @__PURE__ */ i(Q, {}), "Invert Functions"]
 					}), /* @__PURE__ */ i("div", {
 						className: "calc-keypad__group calc-keypad__group--3",
-						children: $.map((e) => /* @__PURE__ */ i(H, {
+						children: te.map((e) => /* @__PURE__ */ i(U, {
 							label: t ? e.inverseLabel : e.label,
 							ariaLabel: t ? e.inverseName : e.name,
 							variant: "scientific",
@@ -834,7 +834,7 @@ function re(e) {
 					className: "calc-keypad__group calc-keypad__group--3",
 					children: ne.map((e) => {
 						let t = v === e.mode;
-						return /* @__PURE__ */ i(H, {
+						return /* @__PURE__ */ i(U, {
 							label: e.label,
 							ariaLabel: t ? `${e.name}, selected` : `Switch to ${e.name.toLowerCase()}`,
 							variant: "scientific",
@@ -848,233 +848,233 @@ function re(e) {
 			/* @__PURE__ */ a("div", {
 				className: "calc-keypad__group calc-keypad__group--4",
 				children: [
-					/* @__PURE__ */ i(H, {
+					/* @__PURE__ */ i(U, {
 						label: "(",
 						ariaLabel: "Open parenthesis",
 						variant: "scientific",
 						onClick: c
 					}),
-					/* @__PURE__ */ i(H, {
+					/* @__PURE__ */ i(U, {
 						label: ")",
 						ariaLabel: "Close parenthesis",
 						variant: "scientific",
 						onClick: l
 					}),
-					/* @__PURE__ */ i(H, {
+					/* @__PURE__ */ i(U, {
 						label: "nCr",
 						ariaLabel: "Combinations",
 						variant: "scientific",
 						onClick: () => o("nCr")
 					}),
-					/* @__PURE__ */ i(H, {
+					/* @__PURE__ */ i(U, {
 						label: "nPr",
 						ariaLabel: "Permutations",
 						variant: "scientific",
 						onClick: () => o("nPr")
 					}),
-					/* @__PURE__ */ i(H, {
+					/* @__PURE__ */ i(U, {
 						label: "e",
 						ariaLabel: "Euler's number e",
 						variant: "scientific",
 						onClick: () => s("e")
 					}),
-					/* @__PURE__ */ i(H, {
+					/* @__PURE__ */ i(U, {
 						label: "eˣ",
 						ariaLabel: "e to the power of x",
 						variant: "scientific",
 						onClick: () => r("exp")
 					}),
-					/* @__PURE__ */ i(H, {
+					/* @__PURE__ */ i(U, {
 						label: "x²",
 						ariaLabel: "x squared",
 						variant: "scientific",
 						onClick: () => r("square")
 					}),
-					/* @__PURE__ */ i(H, {
+					/* @__PURE__ */ i(U, {
 						label: "x³",
 						ariaLabel: "x cubed",
 						variant: "scientific",
 						onClick: () => r("cube")
 					}),
-					/* @__PURE__ */ i(H, {
+					/* @__PURE__ */ i(U, {
 						label: "xⁿ",
 						ariaLabel: "x to the power of n",
 						variant: "scientific",
 						onClick: () => o("^")
 					}),
-					/* @__PURE__ */ i(H, {
+					/* @__PURE__ */ i(U, {
 						label: "10ˣ",
 						ariaLabel: "10 to the power of x",
 						variant: "scientific",
 						onClick: () => r("tenPow")
 					}),
-					/* @__PURE__ */ i(H, {
+					/* @__PURE__ */ i(U, {
 						label: "1/x",
 						ariaLabel: "Reciprocal",
 						variant: "scientific",
 						onClick: () => r("reciprocal")
 					}),
-					/* @__PURE__ */ i(H, {
+					/* @__PURE__ */ i(U, {
 						label: "x!",
 						ariaLabel: "Factorial",
 						variant: "scientific",
 						onClick: () => r("factorial")
 					}),
-					/* @__PURE__ */ i(H, {
+					/* @__PURE__ */ i(U, {
 						label: "√x",
 						ariaLabel: "Square root",
 						variant: "scientific",
 						onClick: () => r("sqrt")
 					}),
-					/* @__PURE__ */ i(H, {
+					/* @__PURE__ */ i(U, {
 						label: "∛x",
 						ariaLabel: "Cube root",
 						variant: "scientific",
 						onClick: () => r("cbrt")
 					}),
-					/* @__PURE__ */ i(H, {
+					/* @__PURE__ */ i(U, {
 						label: "ⁿ√x",
 						ariaLabel: "nth root of x",
 						variant: "scientific",
 						onClick: () => o("nthRoot")
 					}),
-					/* @__PURE__ */ i(H, {
+					/* @__PURE__ */ i(U, {
 						label: "|x|",
 						ariaLabel: "Absolute value",
 						variant: "scientific",
 						onClick: () => r("abs")
 					}),
-					/* @__PURE__ */ i(H, {
+					/* @__PURE__ */ i(U, {
 						label: "ln",
 						ariaLabel: "Natural log",
 						variant: "scientific",
 						onClick: () => r("ln")
 					}),
-					/* @__PURE__ */ i(H, {
+					/* @__PURE__ */ i(U, {
 						label: "log₁₀",
 						ariaLabel: "Log base 10",
 						variant: "scientific",
 						onClick: () => r("log10")
 					}),
-					/* @__PURE__ */ i(H, {
+					/* @__PURE__ */ i(U, {
 						label: "π",
 						ariaLabel: "Pi",
 						variant: "scientific",
 						onClick: () => s("pi")
 					}),
-					/* @__PURE__ */ i(X, {})
+					/* @__PURE__ */ i(Z, {})
 				]
 			}),
 			/* @__PURE__ */ a("div", {
 				className: "calc-keypad__group calc-keypad__group--4",
 				children: [
-					/* @__PURE__ */ i(H, {
-						label: /* @__PURE__ */ i(Q, {}),
+					/* @__PURE__ */ i(U, {
+						label: /* @__PURE__ */ i($, {}),
 						ariaLabel: "Backspace",
 						variant: "function",
 						onClick: u
 					}),
-					/* @__PURE__ */ i(H, {
+					/* @__PURE__ */ i(U, {
 						label: "AC",
 						ariaLabel: "All clear",
 						variant: "function",
 						onClick: h
 					}),
-					/* @__PURE__ */ i(H, {
+					/* @__PURE__ */ i(U, {
 						label: "%",
 						ariaLabel: "Percent",
 						variant: "function",
 						onClick: _
 					}),
-					/* @__PURE__ */ i(H, {
+					/* @__PURE__ */ i(U, {
 						label: "÷",
 						ariaLabel: "Divide",
 						variant: "operator",
 						pressed: x("/"),
 						onClick: () => o("/")
 					}),
-					/* @__PURE__ */ i(H, {
+					/* @__PURE__ */ i(U, {
 						label: "7",
 						ariaLabel: "7",
 						onClick: () => f("7")
 					}),
-					/* @__PURE__ */ i(H, {
+					/* @__PURE__ */ i(U, {
 						label: "8",
 						ariaLabel: "8",
 						onClick: () => f("8")
 					}),
-					/* @__PURE__ */ i(H, {
+					/* @__PURE__ */ i(U, {
 						label: "9",
 						ariaLabel: "9",
 						onClick: () => f("9")
 					}),
-					/* @__PURE__ */ i(H, {
+					/* @__PURE__ */ i(U, {
 						label: "×",
 						ariaLabel: "Multiply",
 						variant: "operator",
 						pressed: x("*"),
 						onClick: () => o("*")
 					}),
-					/* @__PURE__ */ i(H, {
+					/* @__PURE__ */ i(U, {
 						label: "4",
 						ariaLabel: "4",
 						onClick: () => f("4")
 					}),
-					/* @__PURE__ */ i(H, {
+					/* @__PURE__ */ i(U, {
 						label: "5",
 						ariaLabel: "5",
 						onClick: () => f("5")
 					}),
-					/* @__PURE__ */ i(H, {
+					/* @__PURE__ */ i(U, {
 						label: "6",
 						ariaLabel: "6",
 						onClick: () => f("6")
 					}),
-					/* @__PURE__ */ i(H, {
+					/* @__PURE__ */ i(U, {
 						label: "−",
 						ariaLabel: "Subtract",
 						variant: "operator",
 						pressed: x("-"),
 						onClick: () => o("-")
 					}),
-					/* @__PURE__ */ i(H, {
+					/* @__PURE__ */ i(U, {
 						label: "1",
 						ariaLabel: "1",
 						onClick: () => f("1")
 					}),
-					/* @__PURE__ */ i(H, {
+					/* @__PURE__ */ i(U, {
 						label: "2",
 						ariaLabel: "2",
 						onClick: () => f("2")
 					}),
-					/* @__PURE__ */ i(H, {
+					/* @__PURE__ */ i(U, {
 						label: "3",
 						ariaLabel: "3",
 						onClick: () => f("3")
 					}),
-					/* @__PURE__ */ i(H, {
+					/* @__PURE__ */ i(U, {
 						label: "+",
 						ariaLabel: "Add",
 						variant: "operator",
 						pressed: x("+"),
 						onClick: () => o("+")
 					}),
-					/* @__PURE__ */ i(H, {
-						label: /* @__PURE__ */ i(te, {}),
+					/* @__PURE__ */ i(U, {
+						label: /* @__PURE__ */ i(ee, {}),
 						ariaLabel: "Toggle positive negative",
 						onClick: g
 					}),
-					/* @__PURE__ */ i(H, {
+					/* @__PURE__ */ i(U, {
 						label: "0",
 						ariaLabel: "0",
 						onClick: () => f("0")
 					}),
-					/* @__PURE__ */ i(H, {
+					/* @__PURE__ */ i(U, {
 						label: ".",
 						ariaLabel: "Decimal point",
 						onClick: p
 					}),
-					/* @__PURE__ */ i(H, {
+					/* @__PURE__ */ i(U, {
 						label: "=",
 						ariaLabel: "Equals",
 						variant: "operator",
@@ -1088,7 +1088,7 @@ function re(e) {
 //#endregion
 //#region src/components/Calculator/ButtonPanel.tsx
 function ie(e) {
-	return e.mode === "scientific" ? /* @__PURE__ */ i(re, { ...e }) : /* @__PURE__ */ i(Y, { ...e });
+	return e.mode === "scientific" ? /* @__PURE__ */ i(re, { ...e }) : /* @__PURE__ */ i(X, { ...e });
 }
 //#endregion
 //#region src/components/Calculator/Display.tsx
@@ -1130,34 +1130,34 @@ var oe = {
 	"/": "/",
 	"^": "^"
 };
-function se({ theme: t, initialMode: r = "basic" }) {
-	let { displayValue: o, operator: s, waitingForOperand: c, expression: l, announcement: u, announcementKey: d, angleMode: f, parenDepth: p, inputDigit: m, inputDecimal: h, inputOperator: g, performCalculation: _, clearAll: v, toggleSign: y, inputPercent: b, backspace: x, applyScientificFunction: S, toggleAngleMode: C, setAngleMode: w, inputConstant: T, openParen: E, closeParen: D } = V(), [O, k] = n(r), [A, j] = n(!1), M = e(() => {
-		k((e) => e === "basic" ? "scientific" : "basic");
-	}, []), N = e(() => {
-		j((e) => !e);
-	}, []), P = e((e) => {
+function se({ theme: t, initialMode: r = "basic", showModeToggle: o = !0 }) {
+	let { displayValue: s, operator: c, waitingForOperand: l, expression: u, announcement: d, announcementKey: f, angleMode: p, parenDepth: m, inputDigit: h, inputDecimal: g, inputOperator: _, performCalculation: v, clearAll: y, toggleSign: b, inputPercent: x, backspace: S, applyScientificFunction: C, toggleAngleMode: w, setAngleMode: T, inputConstant: E, openParen: D, closeParen: O } = H(), [k, A] = n(r), [j, M] = n(!1), N = e(() => {
+		A((e) => e === "basic" ? "scientific" : "basic");
+	}, []), P = e(() => {
+		M((e) => !e);
+	}, []), F = e((e) => {
 		let { key: t } = e, n = oe[t];
-		t >= "0" && t <= "9" ? (e.preventDefault(), m(t)) : t === "." ? (e.preventDefault(), h()) : n === void 0 ? t === "Enter" || t === "=" ? (e.preventDefault(), _()) : t === "Escape" ? (e.preventDefault(), v()) : t === "Backspace" ? (e.preventDefault(), x()) : t === "%" ? (e.preventDefault(), b()) : t === "(" && O === "scientific" ? (e.preventDefault(), E()) : t === ")" && O === "scientific" && (e.preventDefault(), D()) : (e.preventDefault(), g(n));
+		t >= "0" && t <= "9" ? (e.preventDefault(), h(t)) : t === "." ? (e.preventDefault(), g()) : n === void 0 ? t === "Enter" || t === "=" ? (e.preventDefault(), v()) : t === "Escape" ? (e.preventDefault(), y()) : t === "Backspace" ? (e.preventDefault(), S()) : t === "%" ? (e.preventDefault(), x()) : t === "(" && k === "scientific" ? (e.preventDefault(), D()) : t === ")" && k === "scientific" && (e.preventDefault(), O()) : (e.preventDefault(), _(n));
 	}, [
-		m,
 		h,
 		g,
 		_,
 		v,
+		y,
+		S,
 		x,
-		b,
-		E,
 		D,
-		O
-	]), F = t ? Object.fromEntries(Object.entries(t).map(([e, t]) => [`--${e}`, t])) : void 0;
+		O,
+		k
+	]), I = t ? Object.fromEntries(Object.entries(t).map(([e, t]) => [`--${e}`, t])) : void 0;
 	return /* @__PURE__ */ a("div", {
-		className: O === "scientific" ? "calculator calculator--scientific" : "calculator",
-		style: F,
+		className: k === "scientific" ? "calculator calculator--scientific" : "calculator",
+		style: I,
 		role: "application",
 		"aria-label": "Calculator",
 		"aria-roledescription": "calculator",
 		tabIndex: 0,
-		onKeyDown: P,
+		onKeyDown: F,
 		children: [
 			/* @__PURE__ */ i("div", {
 				className: "sr-only",
@@ -1166,47 +1166,47 @@ function se({ theme: t, initialMode: r = "basic" }) {
 				"aria-atomic": "true",
 				"aria-label": "Calculator announcements",
 				"data-testid": "announcements",
-				children: u
-			}, d),
-			/* @__PURE__ */ i("div", {
+				children: d
+			}, f),
+			o ? /* @__PURE__ */ i("div", {
 				className: "calc-toolbar",
 				children: /* @__PURE__ */ i("button", {
 					type: "button",
 					className: "calc-mode-toggle",
-					"aria-pressed": O === "scientific",
-					onClick: M,
+					"aria-pressed": k === "scientific",
+					onClick: N,
 					"data-testid": "mode-toggle",
-					children: O === "scientific" ? "Basic" : "Scientific"
+					children: k === "scientific" ? "Basic" : "Scientific"
 				})
-			}),
+			}) : null,
 			/* @__PURE__ */ i(ae, {
-				value: o,
-				expression: l,
-				mode: O,
-				angleMode: f,
-				parenDepth: p
+				value: s,
+				expression: u,
+				mode: k,
+				angleMode: p,
+				parenDepth: m
 			}),
 			/* @__PURE__ */ i(ie, {
-				mode: O,
-				onDigit: m,
-				onDecimal: h,
-				onOperator: g,
-				onEquals: _,
-				onClear: v,
-				onToggleSign: y,
-				onPercent: b,
-				activeOperator: s,
-				waitingForOperand: c,
-				angleMode: f,
-				isSecondFunction: A,
-				onScientificFunction: S,
-				onToggleAngleMode: C,
-				onSetAngleMode: w,
-				onBackspace: x,
-				onToggleSecondFunction: N,
-				onConstant: T,
-				onOpenParen: E,
-				onCloseParen: D
+				mode: k,
+				onDigit: h,
+				onDecimal: g,
+				onOperator: _,
+				onEquals: v,
+				onClear: y,
+				onToggleSign: b,
+				onPercent: x,
+				activeOperator: c,
+				waitingForOperand: l,
+				angleMode: p,
+				isSecondFunction: j,
+				onScientificFunction: C,
+				onToggleAngleMode: w,
+				onSetAngleMode: T,
+				onBackspace: S,
+				onToggleSecondFunction: P,
+				onConstant: E,
+				onOpenParen: D,
+				onCloseParen: O
 			})
 		]
 	});

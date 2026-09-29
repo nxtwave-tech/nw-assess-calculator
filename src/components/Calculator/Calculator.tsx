@@ -31,6 +31,11 @@ export interface CalculatorProps {
   theme?: CalculatorTheme;
   /** Which button layout to start in. Defaults to `'basic'`. */
   initialMode?: CalculatorMode;
+  /**
+   * Whether to render the Basic/Scientific switch. Hosts that lock the
+   * calculator to one mode pass `false`. Defaults to `true`.
+   */
+  showModeToggle?: boolean;
 }
 
 /**
@@ -38,7 +43,11 @@ export interface CalculatorProps {
  * Owns its own keyboard handler, live region, and mode/2nd-function toggles,
  * and wraps the `useCalculator` hook for arithmetic state.
  */
-export function Calculator({ theme, initialMode = 'basic' }: CalculatorProps): ReactElement {
+export function Calculator({
+  theme,
+  initialMode = 'basic',
+  showModeToggle = true,
+}: CalculatorProps): ReactElement {
   const {
     displayValue,
     operator,
@@ -158,17 +167,19 @@ export function Calculator({ theme, initialMode = 'basic' }: CalculatorProps): R
         {announcement}
       </div>
 
-      <div className="calc-toolbar">
-        <button
-          type="button"
-          className="calc-mode-toggle"
-          aria-pressed={mode === 'scientific'}
-          onClick={handleToggleMode}
-          data-testid="mode-toggle"
-        >
-          {mode === 'scientific' ? 'Basic' : 'Scientific'}
-        </button>
-      </div>
+      {showModeToggle ? (
+        <div className="calc-toolbar">
+          <button
+            type="button"
+            className="calc-mode-toggle"
+            aria-pressed={mode === 'scientific'}
+            onClick={handleToggleMode}
+            data-testid="mode-toggle"
+          >
+            {mode === 'scientific' ? 'Basic' : 'Scientific'}
+          </button>
+        </div>
+      ) : null}
 
       <Display
         value={displayValue}
