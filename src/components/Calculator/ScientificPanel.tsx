@@ -10,13 +10,40 @@ function Spacer(): ReactElement {
 
 function InvertIcon(): ReactElement {
   return (
-    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+    <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
       <path
-        d="M2.2 4.2A4.6 4.6 0 0 1 11 3.2M11 1.4v2.2H8.8M11.8 9.8A4.6 4.6 0 0 1 3 10.8M3 12.6V10.4h2.2"
+        d="M1.5 4h8m0 0L7.5 2m2 2L7.5 6M10.5 8h-8m0 0 2-2m-2 2 2 2"
         stroke="currentColor"
-        strokeWidth="1.3"
+        strokeWidth="1.1"
         strokeLinecap="round"
         strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+function BackspaceIcon(): ReactElement {
+  return (
+    <svg width="16" height="12" viewBox="0 0 16 12" fill="none" aria-hidden="true">
+      <path
+        d="M5.2 1h8.3A1.5 1.5 0 0 1 15 2.5v7a1.5 1.5 0 0 1-1.5 1.5H5.2a1 1 0 0 1-.75-.34L1 6l3.45-4.66A1 1 0 0 1 5.2 1Z"
+        stroke="currentColor"
+        strokeWidth="1.1"
+        strokeLinejoin="round"
+      />
+      <path d="m7.5 4 4 4m0-4-4 4" stroke="currentColor" strokeWidth="1.1" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+function PlusMinusIcon(): ReactElement {
+  return (
+    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+      <path
+        d="M4 1.5v5M1.5 4h5M8 10.5h4.5M11.5 2.5l-9 9"
+        stroke="currentColor"
+        strokeWidth="1.1"
+        strokeLinecap="round"
       />
     </svg>
   );
@@ -31,19 +58,34 @@ interface TrigKey {
   inverseName: string;
 }
 
-const TRIG: TrigKey[] = [
+const TRIG_KEYS: TrigKey[] = [
   { fn: 'sin', inverse: 'asin', label: 'sin', inverseLabel: 'sin⁻¹', name: 'Sine', inverseName: 'Arc sine' },
   { fn: 'cos', inverse: 'acos', label: 'cos', inverseLabel: 'cos⁻¹', name: 'Cosine', inverseName: 'Arc cosine' },
   { fn: 'tan', inverse: 'atan', label: 'tan', inverseLabel: 'tan⁻¹', name: 'Tangent', inverseName: 'Arc tangent' },
-];
-
-const HYPERBOLIC: TrigKey[] = [
-  { fn: 'sinh', inverse: 'asinh', label: 'sinh', inverseLabel: 'sinh⁻¹', name: 'Hyperbolic sine', inverseName: 'Inverse hyperbolic sine' },
-  { fn: 'cosh', inverse: 'acosh', label: 'cosh', inverseLabel: 'cosh⁻¹', name: 'Hyperbolic cosine', inverseName: 'Inverse hyperbolic cosine' },
-  { fn: 'tanh', inverse: 'atanh', label: 'tanh', inverseLabel: 'tanh⁻¹', name: 'Hyperbolic tangent', inverseName: 'Inverse hyperbolic tangent' },
-];
-
-const RECIPROCAL: TrigKey[] = [
+  {
+    fn: 'sinh',
+    inverse: 'asinh',
+    label: 'sinh',
+    inverseLabel: 'sinh⁻¹',
+    name: 'Hyperbolic sine',
+    inverseName: 'Inverse hyperbolic sine',
+  },
+  {
+    fn: 'cosh',
+    inverse: 'acosh',
+    label: 'cosh',
+    inverseLabel: 'cosh⁻¹',
+    name: 'Hyperbolic cosine',
+    inverseName: 'Inverse hyperbolic cosine',
+  },
+  {
+    fn: 'tanh',
+    inverse: 'atanh',
+    label: 'tanh',
+    inverseLabel: 'tanh⁻¹',
+    name: 'Hyperbolic tangent',
+    inverseName: 'Inverse hyperbolic tangent',
+  },
   { fn: 'csc', inverse: 'acsc', label: 'cosec', inverseLabel: 'cosec⁻¹', name: 'Cosecant', inverseName: 'Arc cosecant' },
   { fn: 'sec', inverse: 'asec', label: 'sec', inverseLabel: 'sec⁻¹', name: 'Secant', inverseName: 'Arc secant' },
   { fn: 'cot', inverse: 'acot', label: 'cot', inverseLabel: 'cot⁻¹', name: 'Cotangent', inverseName: 'Arc cotangent' },
@@ -55,36 +97,10 @@ const ANGLE_KEYS: { mode: AngleMode; label: string; name: string }[] = [
   { mode: 'deg', label: 'Deg', name: 'Degrees' },
 ];
 
-function TrigButtons({
-  keys,
-  inverted,
-  onScientificFunction,
-}: {
-  keys: TrigKey[];
-  inverted: boolean;
-  onScientificFunction: ButtonPanelProps['onScientificFunction'];
-}): ReactElement {
-  return (
-    <>
-      {keys.map((key) => (
-        <CalcButton
-          key={key.fn}
-          label={inverted ? key.inverseLabel : key.label}
-          ariaLabel={inverted ? key.inverseName : key.name}
-          variant="scientific"
-          onClick={() => {
-            onScientificFunction(inverted ? key.inverse : key.fn);
-          }}
-        />
-      ))}
-    </>
-  );
-}
-
 /**
- * Scientific keypad from the assessment design. Eleven columns: seven function
- * keys on the left and the four-column number pad on the right. Invert
- * Functions only swaps the three trig rows.
+ * Scientific keypad from the assessment design, laid out as three groups:
+ * trig keys with Invert Functions and the angle unit, the remaining
+ * functions, and the number pad. Invert Functions only swaps the trig keys.
  */
 export function ScientificPanel(props: ButtonPanelProps): ReactElement {
   const {
@@ -112,204 +128,104 @@ export function ScientificPanel(props: ButtonPanelProps): ReactElement {
     activeOperator === op && waitingForOperand;
 
   return (
-    <>
-      <div className="calc-invert-row">
-        <button
-          type="button"
-          className="calc-invert-toggle"
-          aria-pressed={isSecondFunction}
-          aria-label="Invert Functions"
-          onClick={onToggleSecondFunction}
-        >
-          <InvertIcon />
-          Invert Functions
-        </button>
+    <div className="calc-keypad" data-testid="button-grid">
+      <div className="calc-keypad__trig">
+        <div className="calc-keypad__trig-top">
+          <button
+            type="button"
+            className="calc-invert-toggle"
+            aria-pressed={isSecondFunction}
+            aria-label="Invert Functions"
+            onClick={onToggleSecondFunction}
+          >
+            <InvertIcon />
+            Invert Functions
+          </button>
+          <div className="calc-keypad__group calc-keypad__group--3">
+            {TRIG_KEYS.map((key) => (
+              <CalcButton
+                key={key.fn}
+                label={isSecondFunction ? key.inverseLabel : key.label}
+                ariaLabel={isSecondFunction ? key.inverseName : key.name}
+                variant="scientific"
+                onClick={() => onScientificFunction(isSecondFunction ? key.inverse : key.fn)}
+              />
+            ))}
+          </div>
+        </div>
+        <div className="calc-keypad__group calc-keypad__group--3">
+          {ANGLE_KEYS.map((angle) => {
+            const isSelected = angleMode === angle.mode;
+            return (
+              <CalcButton
+                key={angle.mode}
+                label={angle.label}
+                ariaLabel={
+                  isSelected ? `${angle.name}, selected` : `Switch to ${angle.name.toLowerCase()}`
+                }
+                variant="scientific"
+                className={isSelected ? 'calc-btn--selected' : ''}
+                aria-pressed={isSelected}
+                onClick={() => onSetAngleMode(angle.mode)}
+              />
+            );
+          })}
+        </div>
       </div>
-      <div className="calc-buttons calc-buttons--scientific" data-testid="button-grid">
+
+      <div className="calc-keypad__group calc-keypad__group--4">
         <CalcButton label="(" ariaLabel="Open parenthesis" variant="scientific" onClick={onOpenParen} />
         <CalcButton label=")" ariaLabel="Close parenthesis" variant="scientific" onClick={onCloseParen} />
-        <CalcButton
-          label="nCr"
-          ariaLabel="Combinations"
-          variant="scientific"
-          onClick={() => {
-            onOperator('nCr');
-          }}
-        />
-        <CalcButton
-          label="nPr"
-          ariaLabel="Permutations"
-          variant="scientific"
-          onClick={() => {
-            onOperator('nPr');
-          }}
-        />
+        <CalcButton label="nCr" ariaLabel="Combinations" variant="scientific" onClick={() => onOperator('nCr')} />
+        <CalcButton label="nPr" ariaLabel="Permutations" variant="scientific" onClick={() => onOperator('nPr')} />
+
+        <CalcButton label="e" ariaLabel="Euler's number e" variant="scientific" onClick={() => onConstant('e')} />
+        <CalcButton label="eˣ" ariaLabel="e to the power of x" variant="scientific" onClick={() => onScientificFunction('exp')} />
+        <CalcButton label="x²" ariaLabel="x squared" variant="scientific" onClick={() => onScientificFunction('square')} />
+        <CalcButton label="x³" ariaLabel="x cubed" variant="scientific" onClick={() => onScientificFunction('cube')} />
+
+        <CalcButton label="xⁿ" ariaLabel="x to the power of n" variant="scientific" onClick={() => onOperator('^')} />
+        <CalcButton label="10ˣ" ariaLabel="10 to the power of x" variant="scientific" onClick={() => onScientificFunction('tenPow')} />
+        <CalcButton label="1/x" ariaLabel="Reciprocal" variant="scientific" onClick={() => onScientificFunction('reciprocal')} />
+        <CalcButton label="x!" ariaLabel="Factorial" variant="scientific" onClick={() => onScientificFunction('factorial')} />
+
+        <CalcButton label="√x" ariaLabel="Square root" variant="scientific" onClick={() => onScientificFunction('sqrt')} />
+        <CalcButton label="∛x" ariaLabel="Cube root" variant="scientific" onClick={() => onScientificFunction('cbrt')} />
+        <CalcButton label="ⁿ√x" ariaLabel="nth root of x" variant="scientific" onClick={() => onOperator('nthRoot')} />
+        <CalcButton label="|x|" ariaLabel="Absolute value" variant="scientific" onClick={() => onScientificFunction('abs')} />
+
+        <CalcButton label="ln" ariaLabel="Natural log" variant="scientific" onClick={() => onScientificFunction('ln')} />
+        <CalcButton label="log₁₀" ariaLabel="Log base 10" variant="scientific" onClick={() => onScientificFunction('log10')} />
+        <CalcButton label="π" ariaLabel="Pi" variant="scientific" onClick={() => onConstant('pi')} />
         <Spacer />
-        <Spacer />
-        <Spacer />
-        <CalcButton label="⌫" ariaLabel="Backspace" variant="function" onClick={onBackspace} />
+      </div>
+
+      <div className="calc-keypad__group calc-keypad__group--4">
+        <CalcButton label={<BackspaceIcon />} ariaLabel="Backspace" variant="function" onClick={onBackspace} />
         <CalcButton label="AC" ariaLabel="All clear" variant="function" onClick={onClear} />
         <CalcButton label="%" ariaLabel="Percent" variant="function" onClick={onPercent} />
-        <CalcButton
-          label="÷"
-          ariaLabel="Divide"
-          variant="operator"
-          pressed={operatorPressed('/')}
-          onClick={() => {
-            onOperator('/');
-          }}
-        />
+        <CalcButton label="÷" ariaLabel="Divide" variant="operator" pressed={operatorPressed('/')} onClick={() => onOperator('/')} />
 
-        <TrigButtons keys={TRIG} inverted={isSecondFunction} onScientificFunction={onScientificFunction} />
-        <CalcButton
-          label="e"
-          ariaLabel="Euler's number e"
-          variant="scientific"
-          onClick={() => {
-            onConstant('e');
-          }}
-        />
-        <CalcButton
-          label="eˣ"
-          ariaLabel="e to the power of x"
-          variant="scientific"
-          onClick={() => {
-            onScientificFunction('exp');
-          }}
-        />
-        <CalcButton
-          label="x²"
-          ariaLabel="x squared"
-          variant="scientific"
-          onClick={() => {
-            onScientificFunction('square');
-          }}
-        />
-        <CalcButton
-          label="x³"
-          ariaLabel="x cubed"
-          variant="scientific"
-          onClick={() => {
-            onScientificFunction('cube');
-          }}
-        />
         <CalcButton label="7" ariaLabel="7" onClick={() => onDigit('7')} />
         <CalcButton label="8" ariaLabel="8" onClick={() => onDigit('8')} />
         <CalcButton label="9" ariaLabel="9" onClick={() => onDigit('9')} />
-        <CalcButton
-          label="×"
-          ariaLabel="Multiply"
-          variant="operator"
-          pressed={operatorPressed('*')}
-          onClick={() => onOperator('*')}
-        />
+        <CalcButton label="×" ariaLabel="Multiply" variant="operator" pressed={operatorPressed('*')} onClick={() => onOperator('*')} />
 
-        <TrigButtons keys={HYPERBOLIC} inverted={isSecondFunction} onScientificFunction={onScientificFunction} />
-        <CalcButton
-          label="xⁿ"
-          ariaLabel="x to the power of n"
-          variant="scientific"
-          onClick={() => onOperator('^')}
-        />
-        <CalcButton
-          label="10ˣ"
-          ariaLabel="10 to the power of x"
-          variant="scientific"
-          onClick={() => onScientificFunction('tenPow')}
-        />
-        <CalcButton
-          label="1/x"
-          ariaLabel="Reciprocal"
-          variant="scientific"
-          onClick={() => onScientificFunction('reciprocal')}
-        />
-        <CalcButton
-          label="x!"
-          ariaLabel="Factorial"
-          variant="scientific"
-          onClick={() => onScientificFunction('factorial')}
-        />
         <CalcButton label="4" ariaLabel="4" onClick={() => onDigit('4')} />
         <CalcButton label="5" ariaLabel="5" onClick={() => onDigit('5')} />
         <CalcButton label="6" ariaLabel="6" onClick={() => onDigit('6')} />
-        <CalcButton
-          label="−"
-          ariaLabel="Subtract"
-          variant="operator"
-          pressed={operatorPressed('-')}
-          onClick={() => onOperator('-')}
-        />
+        <CalcButton label="−" ariaLabel="Subtract" variant="operator" pressed={operatorPressed('-')} onClick={() => onOperator('-')} />
 
-        <TrigButtons keys={RECIPROCAL} inverted={isSecondFunction} onScientificFunction={onScientificFunction} />
-        <CalcButton
-          label="√x"
-          ariaLabel="Square root"
-          variant="scientific"
-          onClick={() => onScientificFunction('sqrt')}
-        />
-        <CalcButton
-          label="∛x"
-          ariaLabel="Cube root"
-          variant="scientific"
-          onClick={() => onScientificFunction('cbrt')}
-        />
-        <CalcButton
-          label="ⁿ√x"
-          ariaLabel="nth root of x"
-          variant="scientific"
-          onClick={() => onOperator('nthRoot')}
-        />
-        <CalcButton
-          label="|x|"
-          ariaLabel="Absolute value"
-          variant="scientific"
-          onClick={() => onScientificFunction('abs')}
-        />
         <CalcButton label="1" ariaLabel="1" onClick={() => onDigit('1')} />
         <CalcButton label="2" ariaLabel="2" onClick={() => onDigit('2')} />
         <CalcButton label="3" ariaLabel="3" onClick={() => onDigit('3')} />
-        <CalcButton
-          label="+"
-          ariaLabel="Add"
-          variant="operator"
-          pressed={operatorPressed('+')}
-          onClick={() => onOperator('+')}
-        />
+        <CalcButton label="+" ariaLabel="Add" variant="operator" pressed={operatorPressed('+')} onClick={() => onOperator('+')} />
 
-        {ANGLE_KEYS.map((angle) => (
-          <CalcButton
-            key={angle.mode}
-            label={angle.label}
-            ariaLabel={angleMode === angle.mode ? `${angle.name}, selected` : `Switch to ${angle.name.toLowerCase()}`}
-            variant={angleMode === angle.mode ? 'operator' : 'scientific'}
-            aria-pressed={angleMode === angle.mode}
-            onClick={() => onSetAngleMode(angle.mode)}
-          />
-        ))}
-        <CalcButton
-          label="ln"
-          ariaLabel="Natural log"
-          variant="scientific"
-          onClick={() => onScientificFunction('ln')}
-        />
-        <CalcButton
-          label="log₁₀"
-          ariaLabel="Log base 10"
-          variant="scientific"
-          onClick={() => onScientificFunction('log10')}
-        />
-        <CalcButton
-          label="π"
-          ariaLabel="Pi"
-          variant="scientific"
-          onClick={() => onConstant('pi')}
-        />
-        <Spacer />
-        <CalcButton label="+/−" ariaLabel="Toggle positive negative" variant="function" onClick={onToggleSign} />
+        <CalcButton label={<PlusMinusIcon />} ariaLabel="Toggle positive negative" onClick={onToggleSign} />
         <CalcButton label="0" ariaLabel="0" onClick={() => onDigit('0')} />
         <CalcButton label="." ariaLabel="Decimal point" onClick={onDecimal} />
         <CalcButton label="=" ariaLabel="Equals" variant="operator" onClick={onEquals} />
       </div>
-    </>
+    </div>
   );
 }

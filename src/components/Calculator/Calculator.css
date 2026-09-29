@@ -45,6 +45,7 @@
   --toolbar-bg: transparent;
   --toolbar-text: rgb(255 255 255 / 70%);
   --toolbar-hover: rgb(255 255 255 / 15%);
+  --display-label-color: rgb(255 255 255 / 60%);
 }
 
 /* Screen reader only utility */
@@ -119,9 +120,9 @@
 /* Display */
 .calc-display {
   background: var(--display-bg);
-  padding: 0.25rem 1.25rem 0.5rem;
+  padding: var(--display-padding, 0.25rem 1.25rem 0.5rem);
   text-align: right;
-  min-height: 6rem;
+  min-height: var(--display-min-height, 6rem);
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
@@ -137,19 +138,19 @@
 }
 
 .calc-display__angle-mode {
-  color: rgb(255 255 255 / 60%);
-  font-size: 0.7rem;
+  color: var(--display-label-color);
+  font-size: var(--display-label-size, 0.7rem);
   font-weight: 500;
   letter-spacing: 0.5px;
 }
 
 .calc-display__parens {
-  color: rgb(255 255 255 / 60%);
+  color: var(--display-label-color);
   font-size: var(--display-expression-size);
 }
 
 .calc-display__expression {
-  color: rgb(255 255 255 / 50%);
+  color: var(--display-label-color);
   font-size: var(--display-expression-size);
 }
 
@@ -157,7 +158,7 @@
   display: block;
   color: var(--display-text);
   font-size: var(--display-font-size);
-  font-weight: 300;
+  font-weight: var(--display-value-weight, 300);
   line-height: 1.1;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -172,35 +173,70 @@
   padding: var(--btn-gap);
 }
 
-.calc-buttons--scientific {
-  grid-template-columns: repeat(11, 1fr);
+/* Scientific keypad: trig group, function group, number pad */
+.calc-keypad {
+  display: grid;
+  grid-template-columns: minmax(0, 3fr) minmax(0, 4fr) minmax(0, 4fr);
+  column-gap: var(--keypad-group-gap, 14px);
+  padding: var(--keypad-padding, 14px);
 }
 
-.calc-invert-row {
+.calc-keypad__group {
+  display: grid;
+  gap: var(--btn-gap);
+  grid-auto-rows: var(--btn-size);
+  align-content: start;
+}
+
+.calc-keypad__group--3 {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.calc-keypad__group--4 {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+/* The angle row sits on the bottom row, aligned with the other two groups. */
+.calc-keypad__trig {
   display: flex;
-  padding: 8px 8px 0;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: var(--btn-gap);
+}
+
+.calc-keypad__trig-top {
+  display: flex;
+  flex-direction: column;
+  gap: var(--btn-gap);
+}
+
+.calc-keypad .calc-btn {
+  min-width: 0;
+  min-height: 0;
+  height: var(--btn-size);
 }
 
 .calc-invert-toggle {
-  display: inline-flex;
+  display: flex;
   align-items: center;
+  justify-content: center;
   gap: 6px;
-  height: 32px;
-  padding: 0 10px;
-  border: 1px solid var(--btn-number-bg, #e2e8f0);
-  border-radius: 8px;
-  background: transparent;
-  color: var(--btn-scientific-text, #334155);
+  width: 100%;
+  height: var(--invert-height, 25px);
+  padding: 0 8px;
+  border: 1px solid var(--invert-border, #e2e8f0);
+  border-radius: var(--btn-radius);
+  background: var(--invert-bg, #fff);
+  color: var(--invert-text, #475569);
   font-family: inherit;
-  font-size: 0.8125rem;
-  font-weight: 600;
+  font-size: var(--invert-font-size, 11px);
+  font-weight: 500;
   cursor: pointer;
 }
 
-.calc-invert-toggle[aria-pressed='true'] {
-  background: var(--btn-operator-bg, #3b82f6);
-  border-color: var(--btn-operator-bg, #3b82f6);
-  color: var(--btn-operator-text, #fff);
+.calc-invert-toggle:focus-visible {
+  outline: var(--focus-ring-width) solid var(--focus-ring-color);
+  outline-offset: calc(-1 * var(--focus-ring-width));
 }
 
 /* Base button styles */
@@ -243,6 +279,7 @@
 .calc-btn--number {
   background: var(--btn-number-bg);
   color: var(--btn-number-text);
+  border: var(--btn-number-border, none);
 }
 
 .calc-btn--number:hover {
@@ -271,6 +308,7 @@
 .calc-btn--operator {
   background: var(--btn-operator-bg);
   color: var(--btn-operator-text);
+  font-size: var(--btn-operator-font-size, var(--btn-font-size));
 }
 
 .calc-btn--operator:hover {
@@ -291,7 +329,7 @@
 .calc-btn--scientific {
   background: var(--btn-scientific-bg);
   color: var(--btn-scientific-text);
-  font-size: calc(var(--btn-font-size) * 0.65);
+  font-size: var(--btn-scientific-font-size, calc(var(--btn-font-size) * 0.65));
 }
 
 .calc-btn--scientific:hover {
@@ -300,6 +338,14 @@
 
 .calc-btn--scientific:active {
   background: var(--btn-scientific-active);
+}
+
+/* Selected angle unit (Rad / Grad / Deg) */
+.calc-btn--selected,
+.calc-btn--selected:hover,
+.calc-btn--selected:active {
+  background: var(--btn-selected-bg, #dbeafe);
+  color: var(--btn-selected-text, #2563eb);
 }
 
 /* 2nd function active state: override hover/active via higher specificity */
@@ -389,16 +435,11 @@
     --focus-ring-color: #06c;
     --toolbar-text: rgb(26 26 26 / 70%);
     --toolbar-hover: rgb(0 0 0 / 8%);
+    --display-label-color: rgb(26 26 26 / 70%);
   }
 
   .calculator {
     box-shadow: 0 8px 32px rgb(0 0 0 / 15%);
-  }
-
-  .calc-display__expression,
-  .calc-display__angle-mode,
-  .calc-display__parens {
-    color: rgb(26 26 26 / 70%);
   }
 
   .calc-mode-toggle {

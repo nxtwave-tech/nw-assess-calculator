@@ -1,11 +1,11 @@
-import { ButtonHTMLAttributes, ReactElement } from 'react';
+import { ButtonHTMLAttributes, ReactElement, ReactNode } from 'react';
 /**
  * Props for {@link CalcButton}. Accepts all native `<button>` attributes in
  * addition to the label/variant controls.
  */
 export interface CalcButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-    /** Visible text on the button. */
-    label: string;
+    /** Visible content of the button: text or an icon. */
+    label: ReactNode;
     /** Screen-reader-friendly description. */
     ariaLabel: string;
     /** Visual variant. Drives background, text color, and hover/active state. */
