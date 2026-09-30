@@ -1,6 +1,6 @@
 {
   "name": "@afixt/a11y-calc",
-  "version": "0.3.0",
+  "version": "0.3.8",
   "publishConfig": {
     "access": "public"
   },
@@ -46,7 +46,7 @@
     "**/*.css"
   ],
   "engines": {
-    "node": ">=22"
+    "node": ">=20"
   },
   "scripts": {
     "dev": "vite --config vite.demo.config.ts",
@@ -86,7 +86,6 @@
     "check:ci": "run-s check test build size dupes links security:audit security:osv security:semgrep security:secrets license:check",
     "check:all": "run-s check test build size dupes links security:audit security:osv security:semgrep security:secrets security:codeql security:depcheck license:check",
     "ci": "npm run check:ci",
-    "prepare": "node -e \"process.exit(0)\"",
     "prepublishOnly": "npm run lint && npm test && npm run build"
   },
   "peerDependencies": {
